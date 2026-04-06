@@ -1,0 +1,12 @@
+{
+  "name": "cognify-root",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npm run dev --prefix Cognify",
+    "docker": "cd Cognify/backend && docker-compose up -d",
+    "db": "cd Cognify/backend && npx prisma db push"
+  },
+  "devDependencies": {
+    "prisma": "^7.6.0"
+  }
+}

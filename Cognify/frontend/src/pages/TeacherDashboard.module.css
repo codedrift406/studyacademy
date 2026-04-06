@@ -1,0 +1,542 @@
+.riskCardContainer {
+  background: rgba(255, 255, 255, 0.02) !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.riskHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.riskBadge {
+  background: rgba(244, 63, 94, 0.1);
+  color: #f43f5e;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(244, 63, 94, 0.2);
+}
+
+.riskList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.riskItemCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-glass);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.riskItemCard:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(4px);
+  border-color: rgba(244, 63, 94, 0.3);
+}
+
+.riskUser {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.riskAvatar {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #f43f5e, #fb7185);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 0.8rem;
+  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+}
+
+.riskInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.riskName {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.riskReason {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.riskScoreBadge {
+  background: rgba(244, 63, 94, 0.15);
+  color: #f43f5e;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.cardFooterActions {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.riskItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.riskItem:last-child {
+  border-bottom: none;
+}
+
+.riskUser {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.riskAvatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #f43f5e, #fb7185);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+}
+
+.riskName {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.riskReason {
+  font-size: 0.75rem;
+  color: #fb7185;
+}
+
+.riskStats {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.riskScore {
+  font-weight: 700;
+  color: #f43f5e;
+}
+
+.contactBtn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.contactBtn:hover {
+  background: #f43f5e;
+  border-color: #f43f5e;
+  color: white;
+}
+
+.riskFooter {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-glass);
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.statMini {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+.courseCardSimple {
+  border: 1px solid var(--border-glass);
+  background: rgba(255, 255, 255, 0.01) !important;
+}
+
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.statCardGlow {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border-glass);
+  transition: all 0.3s ease;
+}
+
+.statCardGlow::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, var(--glow-color, rgba(99, 102, 241, 0.1)) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.statCardGlow:hover {
+  transform: translateY(-5px);
+  border-color: var(--glow-stroke, var(--primary));
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.statCardGlow:hover::before {
+  opacity: 1;
+}
+
+.statLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.statValue {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.statChange {
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--success);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* New Analytics Tier */
+.analyticsTier {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.chartContainer {
+  background: var(--card-bg);
+  border-radius: 20px;
+  border: 1px solid var(--border-glass);
+  padding: 1.5rem;
+  height: 380px;
+}
+
+.quickHub {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.curriculumList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.curriculumItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.curriculumMeta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.progressBar {
+  height: 6px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 99px;
+}
+
+.courseImage {
+  width: 100%;
+  height: 160px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2));
+  border-bottom: 1px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.aiBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(168, 85, 247, 0.2);
+  color: var(--secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  margin-top: 1rem;
+}
+
+.manualBadge {
+  background: rgba(148, 163, 184, 0.12);
+  color: var(--text-secondary);
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.headerText {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.searchToolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.searchInputWrapper {
+  flex: 1;
+  min-width: 220px;
+  position: relative;
+}
+
+.searchInputWrapper svg {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+}
+
+.searchField {
+  width: 100%;
+  padding: 0.9rem 1rem 0.9rem 3rem;
+  border-radius: 16px;
+  border: 1px solid var(--border-glass);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--transition-normal);
+}
+
+.searchField:focus {
+  border-color: var(--primary);
+}
+
+.filterChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.chipButton {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-glass);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.chipButton:hover,
+.activeChip {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.35);
+  color: var(--primary);
+}
+
+.skeletonFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.emptyCard {
+  border: 1px dashed var(--border-glass);
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+.emptyStateCard {
+  text-align: center;
+  padding: 3rem;
+}
+
+.emptyIcon {
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+}
+
+.emptyMessage {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.sharedSection {
+  margin-top: 2.25rem;
+}
+
+.courseCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.courseTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.courseDescription {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.courseMetaRow {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.metaChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.courseActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.gridSection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  align-items: stretch;
+}
+
+.sharedSection {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-glass);
+}
+
+@media print {
+  /* Hides everything irrelevant to the report */
+  .sectionHeader button,
+  .riskCardContainer button,
+  nav,
+  .sidebar,
+  .heroActions,
+  ::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .chartContainer {
+    break-inside: avoid;
+    border: none !important;
+  }
+
+  .statCardFixed {
+    border: 1px solid #ddd !important;
+    background: white !important;
+    break-inside: avoid;
+  }
+
+  .statLabel, .statValue, .statChange, strong, h1, h2, h3 {
+    color: black !important;
+  }
+}

@@ -1,0 +1,323 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+  schemas   = ["cognify"]
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+model User {
+  id                String             @id @default(uuid())
+  email             String             @unique
+  password          String
+  name              String?
+  nickname          String?
+  bio               String?
+  avatarUrl         String?
+  role              String             @default("STUDENT")
+  xp                Int                @default(0)
+  streakDays        Int                @default(0)
+  lastActiveDate    DateTime?
+  courses           Course[]           @relation("TeacherCourses")
+  enrollments       Enrollment[]
+  grades            Grade[]
+  progress          Progress[]
+  assessments       CourseAssessment[]
+  notifications     Notification[]
+  messages          CourseMessage[]    @relation("UserMessages")
+  moderatedMessages CourseMessage[]    @relation("ModeratedMessages")
+  refreshTokens     RefreshToken[]
+  auditLogs         AuditLog[]         @relation("ActorAuditLogs")
+  mediaAssets       MediaAsset[]       @relation("UserMediaAssets")
+  quizAttempts      QuizAttempt[]
+  badges            UserBadge[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@schema("cognify")
+}
+
+model Course {
+  id              String             @id @default(uuid())
+  title           String
+  description     String?
+  aiGenerated     Boolean            @default(false)
+  templateKey     String?
+  language        String             @default("en")
+  targetAudience  String?
+  estimatedWeeks  Int?
+  learningGoals   String?
+  dueDate         DateTime?
+  teacherId       String
+  teacher         User               @relation("TeacherCourses", fields: [teacherId], references: [id])
+  lessons         Lesson[]
+  enrollments     Enrollment[]
+  assessments     CourseAssessment[]
+  messages        CourseMessage[]
+  mediaAssets     MediaAsset[]
+  subtitleTracks  SubtitleTrack[]
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@schema("cognify")
+}
+
+model Lesson {
+  id        String     @id @default(uuid())
+  title     String
+  content   String?
+  order     Int        @default(0)
+  courseId  String
+  course    Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  grades    Grade[]
+  progress  Progress[]
+  quizzes   Quiz[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([courseId])
+  @@schema("cognify")
+}
+
+model Enrollment {
+  id         String    @id @default(uuid())
+  studentId  String
+  student    User      @relation(fields: [studentId], references: [id])
+  courseId   String
+  course     Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  enrolledAt DateTime  @default(now())
+
+  @@unique([studentId, courseId])
+  @@index([courseId])
+  @@schema("cognify")
+}
+
+model Grade {
+  id        String    @id @default(uuid())
+  score     Float
+  feedback  String?
+  studentId String
+  student   User      @relation(fields: [studentId], references: [id])
+  lessonId  String
+  lesson    Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([studentId, lessonId])
+  @@index([lessonId])
+  @@schema("cognify")
+}
+
+model Progress {
+  id          String    @id @default(uuid())
+  studentId   String
+  student     User      @relation(fields: [studentId], references: [id])
+  lessonId    String
+  lesson      Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  completedAt DateTime  @default(now())
+
+  @@unique([studentId, lessonId])
+  @@index([lessonId])
+  @@schema("cognify")
+}
+
+model CourseAssessment {
+  id                String    @id @default(uuid())
+  studentId         String
+  courseId          String
+  score             Float
+  passed            Boolean   @default(false)
+  certificateIssued Boolean   @default(false)
+  certificateCode   String?   @unique
+  weakLessons       String?
+  adaptiveState     String?
+  riskScore         Float?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  student           User      @relation(fields: [studentId], references: [id])
+  course            Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, courseId])
+  @@schema("cognify")
+}
+
+model Notification {
+  id        String    @id @default(uuid())
+  userId    String
+  type      String
+  title     String
+  message   String
+  read      Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@schema("cognify")
+}
+
+model CourseMessage {
+  id         String    @id @default(uuid())
+  courseId   String
+  userId     String
+  content    String
+  pinned     Boolean   @default(false)
+  hidden     Boolean   @default(false)
+  moderatedBy String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  course     Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user       User      @relation("UserMessages", fields: [userId], references: [id], onDelete: Cascade)
+  moderator  User?     @relation("ModeratedMessages", fields: [moderatedBy], references: [id])
+
+  @@index([courseId])
+  @@index([userId])
+  @@schema("cognify")
+}
+
+model IntegrationSetting {
+  id        String    @id @default(uuid())
+  teacherId String
+  provider  String
+  webhook   String?
+  enabled   Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([teacherId, provider])
+  @@schema("cognify")
+}
+
+model RefreshToken {
+  id         String    @id @default(uuid())
+  userId     String
+  tokenHash  String    @unique
+  userAgent  String?
+  ipAddress  String?
+  revoked    Boolean   @default(false)
+  expiresAt  DateTime
+  createdAt  DateTime  @default(now())
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@schema("cognify")
+}
+
+model AuditLog {
+  id         String    @id @default(uuid())
+  actorId    String?
+  action     String
+  entityType String
+  entityId   String?
+  method     String?
+  path       String?
+  metadata   String?
+  createdAt  DateTime  @default(now())
+  actor      User?     @relation("ActorAuditLogs", fields: [actorId], references: [id])
+
+  @@schema("cognify")
+}
+
+model MediaAsset {
+  id             String           @id @default(uuid())
+  userId         String?
+  courseId       String?
+  kind           String
+  storageType    String
+  originalName   String?
+  mimeType       String?
+  sizeBytes      Int?
+  path           String
+  publicUrl      String
+  createdAt      DateTime         @default(now())
+  user           User?            @relation("UserMediaAssets", fields: [userId], references: [id])
+  course         Course?          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  subtitleTracks SubtitleTrack[]
+
+  @@schema("cognify")
+}
+
+model SubtitleTrack {
+  id          String      @id @default(uuid())
+  courseId    String
+  mediaAssetId String?
+  language    String      @default("en")
+  provider    String
+  vttContent  String
+  createdAt   DateTime    @default(now())
+  course      Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  mediaAsset  MediaAsset? @relation(fields: [mediaAssetId], references: [id], onDelete: SetNull)
+
+  @@schema("cognify")
+}
+
+model Quiz {
+  id        String        @id @default(uuid())
+  title     String
+  lessonId  String
+  lesson    Lesson        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  questions Question[]
+  attempts  QuizAttempt[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@schema("cognify")
+}
+
+model Question {
+  id        String    @id @default(uuid())
+  quizId    String
+  quiz      Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  content   String
+  type      String    @default("MULTIPLE_CHOICE")
+  answers   Answer[]
+
+  @@schema("cognify")
+}
+
+model Answer {
+  id         String    @id @default(uuid())
+  questionId String
+  question   Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  text       String
+  isCorrect  Boolean   @default(false)
+
+  @@schema("cognify")
+}
+
+model QuizAttempt {
+  id        String    @id @default(uuid())
+  studentId String
+  student   User      @relation(fields: [studentId], references: [id])
+  quizId    String
+  quiz      Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  score     Float
+  createdAt DateTime  @default(now())
+
+  @@schema("cognify")
+}
+
+model Badge {
+  id          String      @id @default(uuid())
+  name        String      @unique
+  description String
+  imageUrl    String?
+  xpReward    Int         @default(0)
+  users       UserBadge[]
+  createdAt   DateTime    @default(now())
+
+  @@schema("cognify")
+}
+
+model UserBadge {
+  id       String    @id @default(uuid())
+  userId   String
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badgeId  String
+  badge    Badge     @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  earnedAt DateTime  @default(now())
+
+  @@unique([userId, badgeId])
+  @@schema("cognify")
+}

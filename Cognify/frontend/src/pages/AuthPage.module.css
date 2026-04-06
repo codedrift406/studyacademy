@@ -1,0 +1,189 @@
+.splitContainer {
+  display: flex;
+  min-height: 100vh;
+  width: 100vw;
+  background: var(--bg-surface);
+  overflow: hidden;
+}
+
+.graphicPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary-light) 100%);
+  overflow: hidden;
+}
+
+[data-theme='light'] .graphicPanel {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%);
+}
+
+.graphicOverlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.2) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(0,0,0,0.2) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.graphicContent {
+  position: relative;
+  z-index: 10;
+  text-align: left;
+  padding: 4rem;
+  max-width: 600px;
+  animation: float 6s ease-in-out infinite;
+}
+
+.formPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-base);
+  position: relative;
+  padding: 2rem;
+}
+
+.authCard {
+  width: 100%;
+  max-width: 440px;
+  border: 1px solid var(--border-glass);
+  background: var(--bg-glass);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  backdrop-filter: blur(20px);
+  animation: slideUpFade 0.5s ease-out;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.roleToggle {
+  display: flex;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  padding: 0.25rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--border-glass);
+}
+
+.roleBtn {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.roleBtn:hover {
+  color: var(--text-primary);
+}
+
+.roleBtn.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 15px var(--primary-glow);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.footer {
+  margin-top: 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.link {
+  color: var(--primary-light);
+  background: transparent;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.prefBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.langSwitch {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.langBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-weight: bold;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.langBtnActive {
+  background: rgba(59,130,246,0.2);
+  color: var(--primary);
+}
+
+.themeToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}
+.themeToggle:hover {
+  background: rgba(255,255,255,0.05);
+  color: var(--text-primary);
+}
+
+@media (max-width: 900px) {
+  .splitContainer {
+    flex-direction: column;
+  }
+  .graphicPanel {
+    display: none;
+  }
+  .formPanel {
+    padding: 1rem;
+  }
+}
