@@ -8,6 +8,13 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+.sectionGamification {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-block: 2rem;
+}
+
 .progressFill {
   height: 100%;
   background: linear-gradient(90deg, var(--primary), var(--secondary-light));
@@ -28,20 +35,28 @@
 }
 
 .aiTutorCard {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(16, 185, 129, 0.08));
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.12),
+    rgba(16, 185, 129, 0.08)
+  );
   border: 1px solid rgba(59, 130, 246, 0.25);
   position: relative;
   overflow: hidden;
 }
 
 .aiTutorCard::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -50%;
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+  background: radial-gradient(
+    circle,
+    rgba(59, 130, 246, 0.15) 0%,
+    transparent 50%
+  );
   animation: shimmer 8s linear infinite;
   pointer-events: none;
 }
@@ -149,7 +164,7 @@
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -343,6 +358,9 @@
 }
 
 @media (max-width: 768px) {
+  .sectionGamification {
+    grid-template-columns: 1fr;
+  }
   .aiBody {
     flex-direction: column;
     align-items: flex-start;
@@ -357,9 +375,21 @@
   .gridSection {
     grid-template-columns: 1fr;
   }
+
+  .sectionHeader {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sectionBlock {
+  }
 }
 
 @keyframes shimmer {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

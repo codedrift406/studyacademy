@@ -1,0 +1,18 @@
+@media (max-width: 425px) {
+  .profileNotifications {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .avatarUpload {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .profilePanel {
+    padding-inline: 0;
+  }
+  .profileCardBody {
+    padding-inline: 5px;
+  }
+}

@@ -77,7 +77,11 @@
 }
 
 .activeChip {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.16), rgba(16, 185, 129, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.16),
+    rgba(16, 185, 129, 0.1)
+  );
   color: var(--text-primary);
   border-color: rgba(59, 130, 246, 0.35);
 }
@@ -240,6 +244,7 @@
 .searchInput {
   width: 100%;
   padding: 0.75rem 1rem 0.75rem 2.5rem;
+  margin-bottom: 1rem;
 }
 
 .statusText {
@@ -337,7 +342,9 @@
   font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .communityAction:hover {
@@ -384,7 +391,11 @@
 .courseThumbnail {
   width: 100%;
   height: 140px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.1),
+    rgba(168, 85, 247, 0.1)
+  );
   border-bottom: 1px solid var(--border-glass);
   display: flex;
   align-items: center;
