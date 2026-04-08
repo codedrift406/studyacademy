@@ -221,37 +221,37 @@
 }
 
 [data-theme='light'] .tabSwitcher {
-  background: rgba(255, 255, 255, 0.78);
-  border-color: rgba(215, 120, 34, 0.14);
+  background: rgba(255, 253, 249, 0.86);
+  border-color: rgba(194, 132, 63, 0.1);
 }
 
 [data-theme='light'] .activeTab {
-  background: rgba(255, 248, 240, 0.96);
-  box-shadow: 0 6px 14px rgba(145, 97, 42, 0.12);
+  background: rgba(244, 234, 223, 0.9);
+  box-shadow: 0 6px 14px rgba(145, 97, 42, 0.08);
 }
 
 [data-theme='light'] .glowBox {
-  background: rgba(255, 251, 246, 0.88);
-  border-color: rgba(215, 120, 34, 0.12);
+  background: rgba(255, 253, 249, 0.9);
+  border-color: rgba(194, 132, 63, 0.1);
 }
 
 [data-theme='light'] .textarea {
-  background: rgba(255, 255, 255, 0.88);
-  border-color: rgba(215, 120, 34, 0.14);
+  background: rgba(255, 253, 249, 0.9);
+  border-color: rgba(194, 132, 63, 0.1);
 }
 
 [data-theme='light'] .textarea:focus {
-  background: rgba(255, 250, 244, 0.98);
+  background: rgba(255, 250, 244, 0.96);
 }
 
 [data-theme='light'] .lessonEntry {
-  background: rgba(255, 255, 255, 0.84);
-  border-color: rgba(215, 120, 34, 0.12);
+  background: rgba(255, 253, 249, 0.9);
+  border-color: rgba(194, 132, 63, 0.1);
 }
 
 [data-theme='light'] .successCard {
-  background: rgba(255, 245, 235, 0.92);
-  border-color: rgba(251, 146, 60, 0.34);
+  background: rgba(255, 248, 240, 0.94);
+  border-color: rgba(194, 132, 63, 0.16);
 }
 
 .lessonTextarea {
@@ -312,4 +312,56 @@
   background: var(--primary);
   color: white;
   transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 100%;
+    padding-bottom: 2rem;
+  }
+
+  .pageHeader {
+    text-align: left;
+    margin-bottom: 1.5rem;
+  }
+
+  .tabSwitcher {
+    flex-direction: column;
+    max-width: 100%;
+  }
+
+  .tabBtn {
+    width: 100%;
+  }
+
+  .glowBox {
+    padding: 1.25rem;
+    border-radius: 20px;
+  }
+
+  .successActions {
+    width: 100%;
+  }
+
+  .successActions > * {
+    flex: 1 1 180px;
+  }
+
+  .lessonEntry {
+    padding: 1rem;
+  }
+
+  .lessonHeader {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .lessonsSection {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+  }
+
+  .tags {
+    margin-bottom: 1rem;
+  }
 }

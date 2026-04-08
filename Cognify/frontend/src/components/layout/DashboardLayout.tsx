@@ -62,7 +62,7 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
   }, [location.pathname]);
 
   useEffect(() => {
-    const handlePointerDown = (event: MouseEvent) => {
+    const handlePointerDown = (event: Event) => {
       if (profileMenuRef.current && !profileMenuRef.current.contains(event.target as Node)) {
         setIsProfileMenuOpen(false);
       }
@@ -74,11 +74,15 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
       }
     };
 
-    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('pointerdown', handlePointerDown);
+    window.addEventListener('scroll', handlePointerDown, true);
+    window.addEventListener('resize', handlePointerDown);
     document.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('scroll', handlePointerDown, true);
+      window.removeEventListener('resize', handlePointerDown);
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
@@ -100,6 +104,7 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
 
   const openPage = (path: string) => {
     setIsProfileMenuOpen(false);
+    setIsMobileMenuOpen(false);
     navigate(path);
   };
 
@@ -110,14 +115,14 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
           { path: '/teacher/courses', label: t('nav.teacher.courses', 'My Courses'), icon: <BookOpen size={20} /> },
           { path: '/teacher/create', label: t('nav.teacher.create', 'Create Course'), icon: <PlusCircle size={20} /> },
           { path: '/teacher/students', label: t('nav.teacher.students', 'Students'), icon: <Users size={20} /> },
-          { path: '/teacher/ai-library', label: 'AI Library', icon: <BrainCircuit size={20} /> },
-          { path: '/teacher/profile', label: 'Profile', icon: <UserCircle2 size={20} /> },
+          { path: '/teacher/ai-library', label: t('nav.aiLibrary', 'AI Library'), icon: <BrainCircuit size={20} /> },
+          { path: '/teacher/profile', label: t('layout.profile', 'Profile'), icon: <UserCircle2 size={20} /> },
         ]
       : [
           { path: '/student/dashboard', label: t('nav.student.dashboard', 'My Learning'), icon: <LayoutDashboard size={20} /> },
           { path: '/student/catalog', label: t('nav.student.catalog', 'Catalog'), icon: <BookOpen size={20} /> },
-          { path: '/student/ai-library', label: 'AI Library', icon: <BrainCircuit size={20} /> },
-          { path: '/student/profile', label: 'Profile', icon: <UserCircle2 size={20} /> },
+          { path: '/student/ai-library', label: t('nav.aiLibrary', 'AI Library'), icon: <BrainCircuit size={20} /> },
+          { path: '/student/profile', label: t('layout.profile', 'Profile'), icon: <UserCircle2 size={20} /> },
         ];
 
   const currentTitle = navLinks.find((item) => location.pathname.startsWith(item.path))?.label || 'Dashboard';
@@ -223,7 +228,10 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
                 <button
                   className={`${styles.profileButton} ${isProfileMenuOpen ? styles.profileButtonOpen : ''}`}
                   type="button"
-                  onClick={() => setIsProfileMenuOpen((current) => !current)}
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    setIsProfileMenuOpen((current) => !current);
+                  }}
                   aria-haspopup="menu"
                   aria-expanded={isProfileMenuOpen}
                   aria-label={t('layout.profileMenu', 'Profile menu')}
@@ -264,8 +272,8 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
           <div className={styles.content}>
             <PageTransition>{children}</PageTransition>
             <footer className={styles.pageFooter}>
-              <span>Cognify © 2026. All rights reserved.</span>
-              <span>AI learning platform for students and teachers.</span>
+              <span>Cognify © 2026. Все права защищены.</span>
+              <span>Сайт поддерживает HTTPS/SSL и использует cookie-файлы для сохранения сессии и защиты ваших данных.</span>
             </footer>
           </div>
         </main>

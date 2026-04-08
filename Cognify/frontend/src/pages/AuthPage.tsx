@@ -199,14 +199,14 @@ export const AuthPage = () => {
             <div className={styles.footer}>
               {mode === 'login' ? (
                 <p>
-                  Don&apos;t have an account?{' '}
+                  Нет аккаунта?{' '}
                   <button type="button" className={styles.link} onClick={() => { setMode('register'); setError(''); }}>
                     {t('auth.register', 'Create Account')}
                   </button>
                 </p>
               ) : (
                 <p>
-                  Already have an account?{' '}
+                  Уже есть аккаунт?{' '}
                   <button type="button" className={styles.link} onClick={() => { setMode('login'); setError(''); }}>
                     {t('auth.login', 'Sign In')}
                   </button>
@@ -216,7 +216,7 @@ export const AuthPage = () => {
           </CardBody>
         </Card>
         <div style={{ position: 'absolute', bottom: '20px', color: 'var(--text-subtle)', fontSize: '0.8rem' }}>
-          Cognify © 2026. Phase 9 Design.
+          Cognify © 2026. Дизайн Phase 9.
         </div>
       </div>
     </div>

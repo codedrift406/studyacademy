@@ -5,9 +5,9 @@ import prisma from '../lib/prisma';
 import { AuthRequest, authMiddleware } from '../middleware/auth';
 import { sendTeacherIntegrationEvent } from './integrations';
 import PDFDocument from 'pdfkit';
-import QRCode from 'qrcode';
 
 const router = Router();
+const CERTIFICATE_TEMPLATE_PATH = path.resolve(process.cwd(), 'assets', 'certificate-template.png');
 function generateCertificateCode(studentId: string, courseId: string): string {
     const shortStudent = studentId.slice(0, 6).toUpperCase();
     const shortCourse = courseId.slice(0, 6).toUpperCase();
@@ -551,7 +551,16 @@ router.get('/certificate/:code/pdf', async (req, res: Response) => {
             where: { certificateCode: code },
             include: {
                 student: { select: { name: true, email: true } },
-                course: { select: { title: true, description: true } },
+                course: {
+                    select: {
+                        title: true,
+                        description: true,
+                        lessons: {
+                            select: { title: true },
+                            orderBy: { order: 'asc' },
+                        },
+                    },
+                },
             },
         });
         if (!item || !item.certificateIssued) {
@@ -559,8 +568,10 @@ router.get('/certificate/:code/pdf', async (req, res: Response) => {
             return;
         }
 
-        const verifyUrl = `${req.protocol}://${req.get('host')}/verify/${code}`;
-        const qrDataUrl = await QRCode.toDataURL(verifyUrl);
+        if (!fs.existsSync(CERTIFICATE_TEMPLATE_PATH)) {
+            res.status(500).json({ error: 'Certificate template is missing.' });
+            return;
+        }
 
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', `inline; filename="cognify-certificate-${code}.pdf"`);
@@ -568,26 +579,52 @@ router.get('/certificate/:code/pdf', async (req, res: Response) => {
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', '0');
 
-        const doc = new PDFDocument({ size: 'A4', margin: 50 });
+        const doc = new PDFDocument({ size: [1536, 1024], margin: 0 });
         doc.pipe(res);
 
-        doc.rect(30, 30, 535, 780).lineWidth(2).stroke('#2ea6ff');
-        doc.fontSize(28).fillColor('#0f172a').text('Cognify Certificate', 0, 90, { align: 'center' });
-        doc.moveDown();
-        doc.fontSize(14).fillColor('#334155').text('This certifies successful course completion', { align: 'center' });
-        doc.moveDown(1.5);
-        doc.fontSize(24).fillColor('#111827').text(item.student.name || item.student.email, { align: 'center' });
-        doc.moveDown();
-        doc.moveDown(0.8);
-        doc.fontSize(18).fillColor('#1f2937').text(item.course.description || item.course.title, { align: 'center' });
-        doc.moveDown(1.2);
-        doc.fontSize(12).fillColor('#475569').text(`Certificate Code: ${code}`, { align: 'center' });
-        doc.fontSize(12).fillColor('#475569').text(`Issued At: ${item.updatedAt.toISOString()}`, { align: 'center' });
-        doc.moveDown(1.5);
-        doc.image(qrDataUrl, 235, 430, { width: 120, height: 120 });
-        doc.moveDown(7);
-        doc.fontSize(10).fillColor('#64748b').text('Scan QR to verify authenticity', { align: 'center' });
-        doc.fontSize(9).fillColor('#94a3b8').text(verifyUrl, { align: 'center' });
+        doc.image(CERTIFICATE_TEMPLATE_PATH, 0, 0, { width: 1536, height: 1024 });
+
+        const recipient = item.student.name || item.student.email;
+        const courseTitle = item.course.title || 'Course';
+        const courseDescription = item.course.description || 'cybersecurity fundamentals and ethical hacking practices.';
+        const lessonTitles = item.course.lessons.map((lesson) => lesson.title).filter(Boolean).slice(0, 5);
+        const bullets =
+            lessonTitles.length > 0
+                ? lessonTitles
+                : [
+                      'Understanding ethical hacking methodologies',
+                      'Network and system vulnerability analysis',
+                      'Basic penetration testing techniques',
+                      'Cybersecurity risk assessment',
+                      'Secure system practices',
+                  ];
+
+        doc.save();
+        doc.rect(100, 315, 560, 100).fill('#ffffff');
+        doc.rect(100, 420, 1320, 120).fill('#ffffff');
+        doc.rect(100, 570, 720, 250).fill('#ffffff');
+        doc.restore();
+
+        doc.font('Helvetica-Oblique').fontSize(54).fillColor('#2a9bd6');
+        doc.text(recipient, 122, 355, { width: 600, align: 'left' });
+
+        doc.font('Helvetica').fontSize(26).fillColor('#555555');
+        doc.text('has successfully completed the ', 122, 438, { continued: true });
+        doc.font('Helvetica-BoldOblique').fontSize(26).fillColor('#404040');
+        doc.text(courseTitle, { continued: true });
+        doc.font('Helvetica').fontSize(26).fillColor('#555555');
+        doc.text('.', { continued: false });
+
+        doc.font('Helvetica').fontSize(24).fillColor('#5d5d5d');
+        doc.text(`and demonstrated proficiency in ${courseDescription}`, 122, 484, {
+            width: 1290,
+            align: 'left',
+        });
+
+        doc.font('Helvetica').fontSize(17).fillColor('#666666');
+        bullets.forEach((bullet, index) => {
+            doc.text(`• ${bullet}`, 132, 605 + index * 40, { width: 620, align: 'left' });
+        });
 
         doc.end();
     } catch (error) {

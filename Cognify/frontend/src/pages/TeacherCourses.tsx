@@ -151,9 +151,9 @@ export const TeacherCourses = () => {
                   </div>
                 </div>
                 <div className={styles.courseActions}>
-                  <Button size="sm" onClick={() => navigate(`/course/${course.id}`)}>Open Course</Button>
+                  <Button size="sm" onClick={() => navigate(`/course/${course.id}`)}>{t('teacher.courses.openCourse', 'Open Course')}</Button>
                   <Button size="sm" variant="secondary" onClick={() => navigate(`/teacher/courses/${course.id}/edit`)}>
-                    Edit Course
+                    {t('teacher.courses.editCourse', 'Edit Course')}
                   </Button>
                 </div>
               </CardBody>

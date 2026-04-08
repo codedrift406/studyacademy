@@ -153,7 +153,7 @@ export const CourseHistoryPage = () => {
                 </div>
                 <div>
                   <div className={styles.statValue}>{isStudent ? completedCourses : teacherCourses.length}</div>
-                  <div className={styles.statLabel}>{isStudent ? 'Completed courses' : 'Published courses'}</div>
+                  <div className={styles.statLabel}>{isStudent ? 'Завершённые курсы' : 'Опубликованные курсы'}</div>
                 </div>
               </div>
               <div className={styles.statCard}>
@@ -162,7 +162,7 @@ export const CourseHistoryPage = () => {
                 </div>
                 <div>
                   <div className={styles.statValue}>{entries.length}</div>
-                  <div className={styles.statLabel}>{isStudent ? 'Total enrollments' : 'Course records'}</div>
+                  <div className={styles.statLabel}>{isStudent ? 'Все записи' : 'Записи курсов'}</div>
                 </div>
               </div>
               <div className={styles.statCard}>
@@ -171,7 +171,7 @@ export const CourseHistoryPage = () => {
                 </div>
                 <div>
                   <div className={styles.statValue}>{isStudent ? (averageScore ?? '—') : teacherCourses.reduce((sum, course) => sum + course.enrolledStudents, 0)}</div>
-                  <div className={styles.statLabel}>{isStudent ? 'Average score' : 'Total students'}</div>
+                  <div className={styles.statLabel}>{isStudent ? 'Средний балл' : 'Всего студентов'}</div>
                 </div>
               </div>
             </div>
@@ -181,7 +181,7 @@ export const CourseHistoryPage = () => {
 
       {isLoading ? (
         <Card>
-          <CardBody className={styles.loadingState}>Loading history...</CardBody>
+          <CardBody className={styles.loadingState}>Загрузка истории...</CardBody>
         </Card>
       ) : entries.length === 0 || (isStudent && completedCourses === 0) ? (
         <Card interactive className={styles.emptyCard}>
@@ -189,16 +189,16 @@ export const CourseHistoryPage = () => {
             <div className={styles.emptyIcon}>
               <GraduationCap size={28} />
             </div>
-            <CardTitle className={styles.emptyTitle}>
-              {isStudent ? 'No completed courses yet' : 'No course history yet'}
+              <CardTitle className={styles.emptyTitle}>
+              {isStudent ? 'Пока нет завершённых курсов' : 'Пока нет истории курсов'}
             </CardTitle>
             <p className={styles.emptyText}>
               {isStudent
-                ? 'Finish a course to see it here with your progress and score summary.'
-                : 'Create your first course to start building a teaching timeline.'}
+                ? 'Завершите курс, чтобы увидеть его здесь вместе с прогрессом и оценкой.'
+                : 'Создайте первый курс, чтобы начать формировать преподавательскую историю.'}
             </p>
             <Button variant="primary" icon={<ArrowRight size={16} />} onClick={goToPrimarySection}>
-              {isStudent ? 'Browse catalog' : 'Open courses'}
+              {isStudent ? 'Открыть каталог' : 'Открыть курсы'}
             </Button>
           </CardBody>
         </Card>
@@ -216,18 +216,18 @@ export const CourseHistoryPage = () => {
                             <CardTitle className={styles.entryTitle}>{course.title}</CardTitle>
                             <p className={styles.entrySubtle}>{course.teacherName}</p>
                           </div>
-                          <div className={styles.statusChip}>100% complete</div>
+                          <div className={styles.statusChip}>100% завершено</div>
                         </div>
                         {course.description && <p className={styles.entryText}>{course.description}</p>}
                       </div>
 
                       <div className={styles.entryMeta}>
                         <div className={styles.metaItem}>
-                          <span className={styles.metaLabel}>Score</span>
+                          <span className={styles.metaLabel}>Баллы</span>
                           <span className={styles.metaValue}>{course.latestScore ?? '—'}</span>
                         </div>
                         <div className={styles.metaItem}>
-                          <span className={styles.metaLabel}>Enrolled</span>
+                          <span className={styles.metaLabel}>Дата записи</span>
                           <span className={styles.metaValue}>{formatDate(course.enrolledAt)}</span>
                         </div>
                         <Button
@@ -236,7 +236,7 @@ export const CourseHistoryPage = () => {
                           icon={<ArrowRight size={14} />}
                           onClick={() => navigate(`/course/${course.id}`)}
                         >
-                          Open
+                          Открыть
                         </Button>
                       </div>
                     </CardBody>
@@ -250,21 +250,21 @@ export const CourseHistoryPage = () => {
                         <div>
                           <CardTitle className={styles.entryTitle}>{course.title}</CardTitle>
                           <p className={styles.entrySubtle}>
-                            {course.lessons.length} lessons
+                            {course.lessons.length} уроков
                           </p>
                         </div>
-                        <div className={styles.statusChip}>{course.enrolledStudents} students</div>
+                        <div className={styles.statusChip}>{course.enrolledStudents} студентов</div>
                       </div>
                       {course.description && <p className={styles.entryText}>{course.description}</p>}
                     </div>
 
                     <div className={styles.entryMeta}>
                       <div className={styles.metaItem}>
-                        <span className={styles.metaLabel}>Created</span>
+                        <span className={styles.metaLabel}>Создано</span>
                         <span className={styles.metaValue}>{formatDate(course.createdAt)}</span>
                       </div>
                       <div className={styles.metaItem}>
-                        <span className={styles.metaLabel}>Lessons</span>
+                        <span className={styles.metaLabel}>Уроков</span>
                         <span className={styles.metaValue}>{course.lessons.length}</span>
                       </div>
                       <Button
@@ -273,7 +273,7 @@ export const CourseHistoryPage = () => {
                         icon={<ArrowRight size={14} />}
                         onClick={() => navigate(`/teacher/courses/${course.id}/edit`)}
                       >
-                        Edit
+                        Редактировать
                       </Button>
                     </div>
                   </CardBody>

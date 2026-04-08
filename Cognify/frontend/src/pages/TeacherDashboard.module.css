@@ -509,6 +509,36 @@
   border-top: 1px solid var(--border-glass);
 }
 
+@media (max-width: 1080px) {
+  .analyticsTier {
+    grid-template-columns: 1fr;
+  }
+
+  .gridSection {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .chartContainer {
+    height: auto;
+    min-height: 320px;
+  }
+
+  .quickHub {
+    gap: 1rem;
+  }
+}
+
 @media print {
   /* Hides everything irrelevant to the report */
   .sectionHeader button,

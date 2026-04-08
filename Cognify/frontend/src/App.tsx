@@ -53,7 +53,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/auth" element={<PageTransition><AuthPage /></PageTransition>} />
-          <Route path="/course/:id" element={<PageTransition><Suspense fallback={<div className="p-8 text-center">Loading Course Environment...</div>}><CourseView /></Suspense></PageTransition>} />
+          <Route path="/course/:id" element={<PageTransition><Suspense fallback={<div className="p-8 text-center">Загрузка курса...</div>}><CourseView /></Suspense></PageTransition>} />
           <Route path="/verify/:code" element={<PageTransition><CertificateVerifyPage /></PageTransition>} />
 
           <Route element={<ProtectedRoute roles={['TEACHER', 'ADMIN']} />}>
@@ -65,14 +65,14 @@ function App() {
                 </DashboardLayout>
               }
             >
-              <Route path="dashboard" element={<Suspense fallback={<div className="p-4">Loading Dashboard...</div>}><TeacherDashboard /></Suspense>} />
-              <Route path="courses" element={<Suspense fallback={<div>Loading Courses...</div>}><TeacherCourses /></Suspense>} />
-              <Route path="create" element={<Suspense fallback={<div>Loading Tools...</div>}><TeacherCourseCreate /></Suspense>} />
-              <Route path="students" element={<Suspense fallback={<div>Loading Students...</div>}><TeacherStudents /></Suspense>} />
+              <Route path="dashboard" element={<Suspense fallback={<div className="p-4">Загрузка панели...</div>}><TeacherDashboard /></Suspense>} />
+              <Route path="courses" element={<Suspense fallback={<div>Загрузка курсов...</div>}><TeacherCourses /></Suspense>} />
+              <Route path="create" element={<Suspense fallback={<div>Загрузка инструментов...</div>}><TeacherCourseCreate /></Suspense>} />
+              <Route path="students" element={<Suspense fallback={<div>Загрузка студентов...</div>}><TeacherStudents /></Suspense>} />
               <Route path="ai-library" element={<AILibraryPage />} />
-              <Route path="history" element={<Suspense fallback={<div>Loading History...</div>}><CourseHistoryPage /></Suspense>} />
-              <Route path="courses/:id/edit" element={<Suspense fallback={<div>Loading Editor...</div>}><TeacherCourseCreate /></Suspense>} />
-              <Route path="profile" element={<Suspense fallback={<div>Loading Profile...</div>}><ProfilePage /></Suspense>} />
+              <Route path="history" element={<Suspense fallback={<div>Загрузка истории...</div>}><CourseHistoryPage /></Suspense>} />
+              <Route path="courses/:id/edit" element={<Suspense fallback={<div>Загрузка редактора...</div>}><TeacherCourseCreate /></Suspense>} />
+              <Route path="profile" element={<Suspense fallback={<div>Загрузка профиля...</div>}><ProfilePage /></Suspense>} />
               <Route path="*" element={<Navigate to="dashboard" replace />} />
             </Route>
           </Route>
@@ -86,11 +86,11 @@ function App() {
                 </DashboardLayout>
               }
             >
-              <Route path="dashboard" element={<Suspense fallback={<div className="p-4">Loading Dashboard...</div>}><StudentDashboard /></Suspense>} />
-              <Route path="catalog" element={<Suspense fallback={<div>Loading Catalog...</div>}><StudentCatalog /></Suspense>} />
+              <Route path="dashboard" element={<Suspense fallback={<div className="p-4">Загрузка панели...</div>}><StudentDashboard /></Suspense>} />
+              <Route path="catalog" element={<Suspense fallback={<div>Загрузка каталога...</div>}><StudentCatalog /></Suspense>} />
               <Route path="ai-library" element={<AILibraryPage />} />
-              <Route path="history" element={<Suspense fallback={<div>Loading History...</div>}><CourseHistoryPage /></Suspense>} />
-              <Route path="profile" element={<Suspense fallback={<div>Loading Profile...</div>}><ProfilePage /></Suspense>} />
+              <Route path="history" element={<Suspense fallback={<div>Загрузка истории...</div>}><CourseHistoryPage /></Suspense>} />
+              <Route path="profile" element={<Suspense fallback={<div>Загрузка профиля...</div>}><ProfilePage /></Suspense>} />
               <Route path="*" element={<Navigate to="dashboard" replace />} />
             </Route>
           </Route>
@@ -104,14 +104,14 @@ function App() {
                 </DashboardLayout>
               }
             >
-              <Route path="dashboard" element={<Suspense fallback={<div className="p-4">Loading Admin...</div>}><AdminDashboard /></Suspense>} />
-              <Route path="history" element={<Suspense fallback={<div>Loading History...</div>}><CourseHistoryPage /></Suspense>} />
-              <Route path="profile" element={<Suspense fallback={<div>Loading Profile...</div>}><ProfilePage /></Suspense>} />
+              <Route path="dashboard" element={<Suspense fallback={<div className="p-4">Загрузка админки...</div>}><AdminDashboard /></Suspense>} />
+              <Route path="history" element={<Suspense fallback={<div>Загрузка истории...</div>}><CourseHistoryPage /></Suspense>} />
+              <Route path="profile" element={<Suspense fallback={<div>Загрузка профиля...</div>}><ProfilePage /></Suspense>} />
               <Route path="*" element={<Navigate to="dashboard" replace />} />
             </Route>
           </Route>
 
-          <Route path="/" element={<PageTransition><Suspense fallback={<div>Loading Cognify...</div>}><LandingPage /></Suspense></PageTransition>} />
+          <Route path="/" element={<PageTransition><Suspense fallback={<div>Загрузка Cognify...</div>}><LandingPage /></Suspense></PageTransition>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>

@@ -368,43 +368,43 @@
 }
 
 [data-theme='light'] .lessonBtn {
-  background: linear-gradient(135deg, var(--bg-card), rgba(255, 248, 240, 0.92));
-  border-color: rgba(215, 120, 34, 0.14);
+  background: linear-gradient(135deg, var(--bg-card), rgba(255, 248, 240, 0.82));
+  border-color: rgba(194, 132, 63, 0.1);
 }
 
 [data-theme='light'] .lessonBtn:hover {
-  background: linear-gradient(135deg, var(--bg-hover), rgba(255, 138, 31, 0.06));
+  background: linear-gradient(135deg, var(--bg-hover), rgba(234, 122, 24, 0.04));
 }
 
 [data-theme='light'] .contentCard {
-  background: rgba(255, 251, 246, 0.9);
-  border-color: rgba(215, 120, 34, 0.12);
-  box-shadow: 0 30px 60px rgba(145, 97, 42, 0.12), inset 0 1px 0 rgba(255,255,255,0.7);
+  background: rgba(255, 253, 249, 0.92);
+  border-color: rgba(194, 132, 63, 0.1);
+  box-shadow: 0 24px 48px rgba(145, 97, 42, 0.08), inset 0 1px 0 rgba(255,255,255,0.72);
 }
 
 [data-theme='light'] .videoFrame {
-  border-color: rgba(215, 120, 34, 0.18);
+  border-color: rgba(194, 132, 63, 0.12);
 }
 
 [data-theme='light'] .videoItem {
-  background: rgba(255, 255, 255, 0.88);
-  border-color: rgba(215, 120, 34, 0.12);
+  background: rgba(255, 253, 249, 0.9);
+  border-color: rgba(194, 132, 63, 0.1);
 }
 
 [data-theme='light'] .videoItem.active {
-  background: linear-gradient(180deg, rgba(255, 138, 31, 0.08), rgba(255, 255, 255, 0.9));
+  background: linear-gradient(180deg, rgba(234, 122, 24, 0.06), rgba(255, 253, 249, 0.92));
 }
 
 [data-theme='light'] .resourceSection,
 [data-theme='light'] .resourceItem,
 [data-theme='light'] .emptyState {
-  background: rgba(255, 255, 255, 0.88);
-  border-color: rgba(215, 120, 34, 0.12);
+  background: rgba(255, 253, 249, 0.9);
+  border-color: rgba(194, 132, 63, 0.1);
 }
 
 [data-theme='light'] .progressBarOuter {
-  background: linear-gradient(90deg, rgba(255, 138, 31, 0.08), rgba(255, 208, 138, 0.05));
-  border-color: rgba(215, 120, 34, 0.14);
+  background: linear-gradient(90deg, rgba(234, 122, 24, 0.05), rgba(255, 215, 165, 0.04));
+  border-color: rgba(194, 132, 63, 0.1);
 }
 
 @media (max-width: 1024px) {
@@ -416,5 +416,43 @@
   .sidebar {
     width: 100%;
     max-height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .sidebar {
+    max-width: 100%;
+    padding-right: 0;
+  }
+
+  .mainContent {
+    padding-right: 0;
+  }
+
+  .contentCard {
+    padding: 1rem;
+    border-radius: 18px;
+  }
+
+  .videoSection {
+    grid-template-columns: 1fr;
+  }
+
+  .videoFrame,
+  .videoEmbed {
+    min-height: 260px;
+  }
+
+  .courseHeader {
+    padding: 1.25rem;
+  }
+
+  .courseTitle {
+    font-size: 1.6rem;
   }
 }

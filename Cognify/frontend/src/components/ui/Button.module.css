@@ -165,42 +165,42 @@
 [data-theme='light'] .primary {
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
   box-shadow: 
-    0 8px 20px -4px rgba(251, 146, 60, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 8px 20px -4px rgba(234, 122, 24, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 [data-theme='light'] .primary:hover:not(:disabled) {
   box-shadow: 
-    0 12px 28px -6px rgba(251, 146, 60, 0.3),
-    0 0 20px rgba(249, 115, 22, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    0 10px 24px -6px rgba(234, 122, 24, 0.22),
+    0 0 16px rgba(234, 122, 24, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 [data-theme='light'] .secondary {
-  background: linear-gradient(135deg, rgba(249, 115, 22, 0.03), rgba(249, 115, 22, 0.01));
+  background: linear-gradient(135deg, rgba(234, 122, 24, 0.025), rgba(234, 122, 24, 0.008));
   color: var(--text-primary);
   border: 1.5px solid var(--border);
-  box-shadow: 0 4px 12px -4px rgba(15, 23, 42, 0.1);
+  box-shadow: 0 4px 12px -4px rgba(115, 74, 32, 0.08);
 }
 
 [data-theme='light'] .secondary:hover:not(:disabled) {
-  background: linear-gradient(135deg, rgba(249, 115, 22, 0.08), rgba(249, 115, 22, 0.04));
+  background: linear-gradient(135deg, rgba(234, 122, 24, 0.05), rgba(234, 122, 24, 0.02));
   border-color: var(--primary);
   box-shadow: 
-    0 8px 16px -4px rgba(15, 23, 42, 0.12),
-    0 0 12px rgba(251, 146, 60, 0.12);
+    0 8px 16px -4px rgba(115, 74, 32, 0.1),
+    0 0 10px rgba(234, 122, 24, 0.08);
 }
 
 [data-theme='light'] .ghost:hover:not(:disabled) {
-  background: rgba(249, 115, 22, 0.08);
+  background: rgba(234, 122, 24, 0.06);
   border-color: var(--primary);
   color: var(--primary);
 }
 
 [data-theme='light'] .danger {
-  box-shadow: 0 8px 20px -4px rgba(220, 38, 38, 0.25);
+  box-shadow: 0 8px 20px -4px rgba(209, 75, 60, 0.2);
 }
 
 [data-theme='light'] .danger:hover:not(:disabled) {
-  box-shadow: 0 12px 28px -6px rgba(220, 38, 38, 0.3);
+  box-shadow: 0 12px 28px -6px rgba(209, 75, 60, 0.24);
 }

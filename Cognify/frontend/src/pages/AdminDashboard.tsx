@@ -44,7 +44,7 @@ export const AdminDashboard = () => {
         setRecent(recentData);
       } catch (err) {
         console.error('Analytics fetch error', err);
-        setError('Could not load analytics. Please try again later.');
+        setError('Не удалось загрузить аналитику. Попробуйте позже.');
       } finally {
         setLoading(false);
       }
@@ -54,7 +54,7 @@ export const AdminDashboard = () => {
   }, []);
 
   if (loading) {
-    return <p className={styles.statusText}>Loading admin metrics...</p>;
+    return <p className={styles.statusText}>Загрузка метрик админки...</p>;
   }
 
   if (error) {
@@ -63,31 +63,31 @@ export const AdminDashboard = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Analytics Dashboard</h1>
+      <h1 className={styles.title}>Панель аналитики</h1>
 
       <div className={styles.grid}>
         <Card>
           <div className={styles.cardHeader}>
             <User size={20} />
-            <h2>Users</h2>
+            <h2>Пользователи</h2>
           </div>
           <p className={styles.statValue}>{system?.userCount || 0}</p>
-          <small className="text-secondary">New in 7d: {recent?.last7days?.users || 0}</small>
+          <small className="text-secondary">За 7 дней: {recent?.last7days?.users || 0}</small>
         </Card>
 
         <Card>
           <div className={styles.cardHeader}>
             <BookOpen size={20} />
-            <h2>Courses</h2>
+            <h2>Курсы</h2>
           </div>
           <p className={styles.statValue}>{system?.courseCount || 0}</p>
-          <small className="text-secondary">New in 7d: {recent?.last7days?.courses || 0}</small>
+          <small className="text-secondary">За 7 дней: {recent?.last7days?.courses || 0}</small>
         </Card>
 
         <Card>
           <div className={styles.cardHeader}>
             <Layers size={20} />
-            <h2>Lessons</h2>
+            <h2>Уроки</h2>
           </div>
           <p className={styles.statValue}>{system?.lessonCount || 0}</p>
         </Card>
@@ -95,16 +95,16 @@ export const AdminDashboard = () => {
         <Card>
           <div className={styles.cardHeader}>
             <Activity size={20} />
-            <h2>Enrollments</h2>
+            <h2>Записи</h2>
           </div>
           <p className={styles.statValue}>{system?.enrollmentCount || 0}</p>
-          <small className="text-secondary">New in 7d: {recent?.last7days?.enrollments || 0}</small>
+          <small className="text-secondary">За 7 дней: {recent?.last7days?.enrollments || 0}</small>
         </Card>
       </div>
 
       <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>System status</h2>
-        <p>Core services: <strong>Online</strong></p>
+        <h2 className={styles.sectionTitle}>Состояние системы</h2>
+        <p>Основные сервисы: <strong>Онлайн</strong></p>
       </div>
     </div>
   );

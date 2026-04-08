@@ -51,10 +51,10 @@ export const TeacherDashboard = () => {
 
   const dashboardMetrics = useMemo(
     () => [
-      { label: 'Students', value: overview?.totalStudents || 0, suffix: '', color: 'var(--primary)' },
-      { label: 'Enrollments', value: overview?.totalEnrollments || 0, suffix: '', color: 'var(--secondary)' },
-      { label: 'Completion', value: overview?.completionRate || 0, suffix: '%', color: 'var(--success)' },
-      { label: 'Avg score', value: overview?.averageScore || 0, suffix: '%', color: 'var(--warning)' },
+      { label: 'Студенты', value: overview?.totalStudents || 0, suffix: '', color: 'var(--primary)' },
+      { label: 'Записи', value: overview?.totalEnrollments || 0, suffix: '', color: 'var(--secondary)' },
+      { label: 'Завершение', value: overview?.completionRate || 0, suffix: '%', color: 'var(--success)' },
+      { label: 'Средний балл', value: overview?.averageScore || 0, suffix: '%', color: 'var(--warning)' },
     ],
     [overview]
   );
@@ -98,7 +98,7 @@ export const TeacherDashboard = () => {
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
           <Button variant="secondary" onClick={() => window.print()}>
-            Export PDF Report
+            Экспорт PDF-отчёта
           </Button>
           <Button icon={<Sparkles size={18} />} onClick={() => navigate('/teacher/create')}>
             {t('teacher.createCourse', 'Create Course')}
@@ -111,28 +111,28 @@ export const TeacherDashboard = () => {
           <CardBody>
             <div className={styles.statLabel}><Users size={20} /> {t('teacher.totalStudents', 'Total Students')}</div>
             {isLoading ? <Skeleton width="60%" height="2rem" /> : <div className={styles.statValue}>{overview?.totalStudents || 0}</div>}
-            <div className={styles.statChange}><TrendingUp size={14} /> {overview?.totalEnrollments || 0} enrollments</div>
+            <div className={styles.statChange}><TrendingUp size={14} /> {overview?.totalEnrollments || 0} записей</div>
           </CardBody>
         </Card>
         <Card className={styles.statCardGlow} style={{ '--glow-color': 'rgba(251, 146, 60, 0.1)', '--glow-stroke': 'rgba(255, 210, 138, 0.4)' } as any}>
           <CardBody>
             <div className={styles.statLabel}><BookOpen size={20} /> {t('teacher.activeCourses', 'Active Courses')}</div>
             {isLoading ? <Skeleton width="50%" height="2rem" /> : <div className={styles.statValue}>{overview?.totalCourses || courses.length}</div>}
-            <div className={styles.statChange}>{overview?.aiCourseCount || 0} AI assisted</div>
+            <div className={styles.statChange}>{overview?.aiCourseCount || 0} с участием ИИ</div>
           </CardBody>
         </Card>
         <Card className={styles.statCardGlow} style={{ '--glow-color': 'rgba(244, 63, 94, 0.1)', '--glow-stroke': 'rgba(244, 63, 94, 0.4)' } as any}>
           <CardBody>
             <div className={styles.statLabel}><Users size={20} style={{ color: '#f43f5e' }} /> {t('teacher.riskGroup', 'Risk Group')}</div>
             {isLoading ? <Skeleton width="40%" height="2rem" /> : <div className={styles.statValue} style={{ color: '#f43f5e' }}>{overview?.riskCount || 0}</div>}
-            <div className={styles.statChange} style={{ color: '#f43f5e' }}>Needs attention</div>
+            <div className={styles.statChange} style={{ color: '#f43f5e' }}>Требует внимания</div>
           </CardBody>
         </Card>
         <Card className={styles.statCardGlow} style={{ '--glow-color': 'rgba(251, 146, 60, 0.1)', '--glow-stroke': 'rgba(251, 146, 60, 0.4)' } as any}>
           <CardBody>
             <div className={styles.statLabel}><TrendingUp size={20} style={{ color: '#fb923c' }} /> {t('teacher.courseHealth', 'Course Health')}</div>
             {isLoading ? <Skeleton width="55%" height="2rem" /> : <div className={styles.statValue} style={{ color: '#fb923c' }}>{overview?.completionRate || 0}%</div>}
-            <div className={styles.statChange} style={{ color: '#fb923c' }}>Avg Score: {overview?.averageScore ?? 0}%</div>
+            <div className={styles.statChange} style={{ color: '#fb923c' }}>Средний балл: {overview?.averageScore ?? 0}%</div>
           </CardBody>
         </Card>
       </div>
@@ -140,8 +140,8 @@ export const TeacherDashboard = () => {
       <div className={styles.analyticsTier}>
         <div className={styles.chartContainer}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-             <h3 style={{ margin: 0 }}>Analytics Pulse</h3>
-             <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Performance Metrics</div>
+             <h3 style={{ margin: 0 }}>Пульс аналитики</h3>
+             <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Метрики эффективности</div>
           </div>
           <div style={{ height: 280 }}>
             <ResponsiveContainer width="100%" height="100%">
@@ -166,20 +166,20 @@ export const TeacherDashboard = () => {
 
         <div className={styles.quickHub}>
           <Card style={{ flex: 1 }}>
-            <CardBody>
-              <h3 style={{ fontSize: '0.9rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                 <BookOpen size={16} color="var(--primary)" /> Recent Courses
-              </h3>
+              <CardBody>
+                <h3 style={{ fontSize: '0.9rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                 <BookOpen size={16} color="var(--primary)" /> Недавние курсы
+                </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
                 {courses.slice(0, 3).map(course => (
                   <div key={course.id} style={{ padding: '0.6rem 0.75rem', background: 'rgba(255,255,255,0.03)', borderRadius: '10px', border: '1px solid var(--border-glass)', cursor: 'pointer' }} onClick={() => navigate(`/teacher/courses/${course.id}`)}>
                     <div style={{ fontSize: '0.85rem', fontWeight: 600 }}>{course.title}</div>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{course._count?.enrollments || 0} enrolled</div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{course._count?.enrollments || 0} записались</div>
                   </div>
                 ))}
               </div>
               <Button variant="secondary" size="sm" fullWidth style={{ marginTop: '1rem' }} onClick={() => navigate('/teacher/courses')}>
-                 All Courses
+                 Все курсы
               </Button>
             </CardBody>
           </Card>
@@ -191,8 +191,8 @@ export const TeacherDashboard = () => {
         <Card interactive className={styles.riskCardContainer}>
           <CardBody>
             <div className={styles.riskHeader}>
-              <h3 style={{ margin: 0, color: '#f43f5e', fontSize: '1rem', fontWeight: 800 }}>Risk Monitor</h3>
-              <span className={styles.riskBadge}>Priority</span>
+              <h3 style={{ margin: 0, color: '#f43f5e', fontSize: '1rem', fontWeight: 800 }}>Монитор риска</h3>
+              <span className={styles.riskBadge}>Приоритет</span>
             </div>
             
             {isLoading ? (
@@ -200,7 +200,7 @@ export const TeacherDashboard = () => {
                 <Skeleton width="100%" height="4rem" />
               </div>
             ) : !overview?.riskStudents?.length ? (
-              <p style={{ color: 'var(--text-secondary)', marginTop: '1rem' }}>All students are performing well.</p>
+              <p style={{ color: 'var(--text-secondary)', marginTop: '1rem' }}>Все студенты показывают хороший результат.</p>
             ) : (
               <div className={styles.riskList} style={{ marginTop: '1rem' }}>
                 {overview.riskStudents.slice(0, 3).map((item, index) => (
@@ -222,7 +222,7 @@ export const TeacherDashboard = () => {
             )}
             <div className={styles.cardFooterActions}>
               <Button size="sm" variant="secondary" fullWidth onClick={() => navigate('/teacher/students')}>
-                Detailed Risk Analysis
+                Подробный анализ риска
               </Button>
             </div>
           </CardBody>
@@ -231,12 +231,12 @@ export const TeacherDashboard = () => {
         {/* Curriculum Health - Visual Progress */}
         <Card>
           <CardBody>
-            <h3 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '1rem' }}>Curriculum Health</h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>Hardest topics based on student performance.</p>
+            <h3 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '1rem' }}>Состояние программы</h3>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>Самые сложные темы по результатам студентов.</p>
             
             <div className={styles.curriculumList}>
               {!overview?.weakTopics?.length ? (
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Insufficient data for topic analysis.</p>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Недостаточно данных для анализа тем.</p>
               ) : (
                 overview.weakTopics.slice(0, 4).map((topic) => {
                   const riskPercentage = Math.min((topic.count / (overview?.totalStudents || 1)) * 100, 100);
@@ -244,7 +244,7 @@ export const TeacherDashboard = () => {
                     <div key={topic.lessonTitle} className={styles.curriculumItem}>
                       <div className={styles.curriculumMeta}>
                         <span>{topic.lessonTitle}</span>
-                        <span style={{ color: '#f59e0b' }}>{topic.count} failures</span>
+                        <span style={{ color: '#f59e0b' }}>{topic.count} ошибок</span>
                       </div>
                       <div className={styles.progressBar}>
                         <div className={styles.progressFill} style={{ width: `${riskPercentage}%`, background: 'var(--warning)' }} />
@@ -260,15 +260,15 @@ export const TeacherDashboard = () => {
         {/* System Snapshot */}
         <Card>
           <CardBody>
-            <h3 style={{ marginBottom: '1rem', fontSize: '1rem', fontWeight: 800 }}>Automation Snapshot</h3>
+            <h3 style={{ marginBottom: '1rem', fontSize: '1rem', fontWeight: 800 }}>Снимок автоматизации</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px' }}>
                   <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(251, 146, 60, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fb923c' }}>
                     <CheckCircle2 size={16} />
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.85rem', fontWeight: 600 }}>AI Grading System</div>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Operational & Syncing</div>
+                    <div style={{ fontSize: '0.85rem', fontWeight: 600 }}>Система ИИ-оценивания</div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Работает и синхронизируется</div>
                   </div>
                </div>
                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px' }}>
@@ -276,13 +276,13 @@ export const TeacherDashboard = () => {
                     <CheckCircle2 size={16} />
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.85rem', fontWeight: 600 }}>Risk Scoring Engine</div>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Real-time analysis active</div>
+                    <div style={{ fontSize: '0.85rem', fontWeight: 600 }}>Движок оценки риска</div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Аналитика в реальном времени</div>
                   </div>
                </div>
             </div>
             <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--border-glass)', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-               All systems operational. Statistics updated 1m ago.
+               Все системы работают нормально. Статистика обновлена минуту назад.
             </div>
           </CardBody>
         </Card>

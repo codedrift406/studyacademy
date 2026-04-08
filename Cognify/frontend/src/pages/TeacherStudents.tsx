@@ -163,23 +163,23 @@ export const TeacherStudents = () => {
       animate={{ opacity: 1, y: 0 }}
     >
       {/* Header Section */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
         <div>
           <h1 className="text-gradient" style={{ fontSize: '2.4rem', marginBottom: '0.2rem' }}>
             {t('teacher.students.gradingTitle', 'Student Grading')}
           </h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
-            Monitor academic progress and manage performance.
+            Отслеживайте учебный прогресс и управляйте успеваемостью.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <Button variant="secondary" icon={<Filter size={18} />}>Advanced Filters</Button>
-          <Button variant="primary" icon={<CheckCircle2 size={18} />}>Export Report</Button>
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          <Button variant="secondary" icon={<Filter size={18} />}>Расширенные фильтры</Button>
+          <Button variant="primary" icon={<CheckCircle2 size={18} />}>Экспорт отчёта</Button>
         </div>
       </div>
 
       {/* Top Metrics Grid - 3 Harmonious Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '1.5rem', marginBottom: '1.5rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '1.5rem' }}>
         
         {/* Card 1: Select & Search (Direct Controls) */}
         <Card className="glass-panel" style={{ height: '100%' }}>
@@ -202,12 +202,12 @@ export const TeacherStudents = () => {
               </div>
               <div className={styles.formGroup}>
                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-secondary)' }}>
-                  <SearchIcon size={14} /> Quick Search
+                  <SearchIcon size={14} /> Быстрый поиск
                 </label>
                 <input
                   type="text"
                   className="glass-input"
-                  placeholder="Student name or email..."
+                  placeholder="Имя студента или email..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   style={{ height: '42px', fontSize: '0.9rem' }}
@@ -224,13 +224,13 @@ export const TeacherStudents = () => {
               <h3 style={{ margin: 0, color: '#f43f5e', fontSize: '0.9rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                  <AlertCircle size={16} /> {t('teacher.riskGroup', 'Risk Group')}
               </h3>
-              <span className={styles.riskBadge}>Attention</span>
+              <span className={styles.riskBadge}>Внимание</span>
             </div>
             <div className={styles.riskList} style={{ marginTop: '0.75rem' }}>
               {isLoading ? (
                 <Skeleton width="100%" height="4rem" />
               ) : !overview?.riskStudents?.length ? (
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', padding: '1rem 0' }}>Perfect! No students at risk.</p>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', padding: '1rem 0' }}>Отлично! Студентов в зоне риска нет.</p>
               ) : (
                 overview.riskStudents.slice(0, 2).map((item, index) => (
                   <div key={index} className={styles.riskItemCard} style={{ padding: '0.5rem 0.75rem', marginBottom: '0.5rem' }}>
@@ -256,21 +256,21 @@ export const TeacherStudents = () => {
         <Card className="glass-panel" style={{ background: 'rgba(249, 115, 22, 0.02)', height: '100%' }}>
           <CardBody>
             <h3 style={{ fontSize: '0.85rem', marginBottom: '0.8rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <TrendingUp size={16} /> Course Snapshot
+              <TrendingUp size={16} /> Сводка по курсу
             </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '0.75rem', marginBottom: '0.75rem' }}>
                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '0.5rem', borderRadius: '8px' }}>
-                  <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Class Avg</div>
+                  <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Средний балл</div>
                   <div style={{ fontSize: '1rem', fontWeight: 700 }}>{overview?.averageScore ?? 0}%</div>
                </div>
                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '0.5rem', borderRadius: '8px' }}>
-                  <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Completion</div>
+                  <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Завершение</div>
                   <div style={{ fontSize: '1rem', fontWeight: 700 }}>{overview?.completionRate ?? 0}%</div>
                </div>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                <Activity size={12} color="var(--primary)" />
-               <span>{overview?.totalEnrollments || 0} active enrollments.</span>
+               <span>{overview?.totalEnrollments || 0} активных записей.</span>
             </div>
           </CardBody>
         </Card>
@@ -284,13 +284,13 @@ export const TeacherStudents = () => {
               <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}>
                 <Activity size={48} color="var(--primary)" />
               </motion.div>
-              <p style={{ marginTop: '1.5rem', color: 'var(--text-secondary)' }}>Synchronizing academic records...</p>
+              <p style={{ marginTop: '1.5rem', color: 'var(--text-secondary)' }}>Синхронизация учебных данных...</p>
             </div>
           ) : !gradeData || !filteredStudents.length ? (
             <div style={{ padding: '6rem 2rem', textAlign: 'center' }}>
               <Users size={64} style={{ opacity: 0.1, marginBottom: '1.5rem' }} />
-              <h3 style={{ color: 'var(--text-primary)' }}>No student data available</h3>
-              <p style={{ color: 'var(--text-secondary)' }}>Ensure students are enrolled in the selected course.</p>
+              <h3 style={{ color: 'var(--text-primary)' }}>Данные студентов недоступны</h3>
+              <p style={{ color: 'var(--text-secondary)' }}>Убедитесь, что студенты записаны на выбранный курс.</p>
             </div>
           ) : (
             <div style={{ overflowX: 'auto', maxHeight: '650px' }}>
@@ -298,10 +298,10 @@ export const TeacherStudents = () => {
                 <thead style={{ position: 'sticky', top: 0, zIndex: 10, background: 'var(--bg-surface)' }}>
                   <tr>
                     <th style={{ textAlign: 'left', padding: '1.25rem 1.5rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', borderBottom: '1px solid var(--border-glass)' }}>
-                      Student Profile
+                      Профиль студента
                     </th>
                     <th style={{ textAlign: 'left', padding: '1.25rem 1rem', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', borderBottom: '1px solid var(--border-glass)' }}>
-                      Avg Score
+                      Средний балл
                     </th>
                     {gradeData.course.lessons.map((lesson) => (
                       <th key={lesson.id} style={{ textAlign: 'left', padding: '1.25rem 1rem', minWidth: 160, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', borderBottom: '1px solid var(--border-glass)' }}>

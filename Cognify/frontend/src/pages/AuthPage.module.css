@@ -80,12 +80,15 @@
   background: rgba(255,255,255,0.03);
   border-radius: 12px;
   padding: 0.25rem;
+  gap: 0.25rem;
+  flex-wrap: wrap;
   margin-bottom: 2rem;
   border: 1px solid var(--border-glass);
 }
 
 .roleBtn {
   flex: 1;
+  min-width: 140px;
   padding: 0.75rem;
   border: none;
   background: transparent;
@@ -136,6 +139,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
   margin-bottom: 1.5rem;
 }
 
@@ -163,6 +168,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: nowrap;
   background: transparent;
   border: none;
   color: var(--text-secondary);
@@ -185,5 +191,19 @@
   }
   .formPanel {
     padding: 1rem;
+  }
+
+  .prefBar {
+    align-items: stretch;
+  }
+
+  .langSwitch,
+  .themeToggle {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .roleBtn {
+    min-width: 0;
   }
 }

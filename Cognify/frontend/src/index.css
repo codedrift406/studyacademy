@@ -64,44 +64,44 @@
   color-scheme: light;
 
   /* Premium Light Mode */
-  --bg-base: #f6f1ea;
-  --bg-surface: #fffaf5;
-  --bg-elevated: #f3e7d8;
-  --bg-glass: rgba(255, 250, 245, 0.88);
-  --bg-glass-hover: rgba(255, 247, 239, 0.98);
-  --bg-subtle: rgba(249, 115, 22, 0.05);
+  --bg-base: #f8f3ed;
+  --bg-surface: #fffdf9;
+  --bg-elevated: #f4eadf;
+  --bg-glass: rgba(255, 253, 249, 0.84);
+  --bg-glass-hover: rgba(255, 251, 246, 0.96);
+  --bg-subtle: rgba(234, 122, 24, 0.035);
 
-  --primary: #ff8a1f;
-  --primary-light: #ffae5a;
-  --primary-dark: #d86d00;
-  --primary-hover: #ffc06d;
-  --primary-glow: rgba(255, 138, 31, 0.16);
-  --secondary: #f59e0b;
-  --secondary-light: #ffcb66;
-  --secondary-dark: #b45309;
-  --accent: #ff8a1f;
-  --accent-light: #ffe0bc;
+  --primary: #ea7a18;
+  --primary-light: #ff9f4d;
+  --primary-dark: #c76400;
+  --primary-hover: #ffba75;
+  --primary-glow: rgba(234, 122, 24, 0.12);
+  --secondary: #c98c2a;
+  --secondary-light: #f0c46a;
+  --secondary-dark: #a86b18;
+  --accent: #ea7a18;
+  --accent-light: #ffe5c8;
 
-  --success: #f59e0b;
-  --warning: #fb923c;
-  --danger: #dc2626;
-  --danger-light: #ef4444;
+  --success: #c98c2a;
+  --warning: #ea7a18;
+  --danger: #d14b3c;
+  --danger-light: #ea6f63;
 
-  --text-primary: #24170f;
-  --text-secondary: #6d4b35;
-  --text-muted: #8f6d58;
-  --text-subtle: #a98c78;
+  --text-primary: #2d1d14;
+  --text-secondary: #6f4e3c;
+  --text-muted: #8b6c57;
+  --text-subtle: #ad907b;
   
-  --border: rgba(215, 120, 34, 0.2);
-  --border-glass: rgba(215, 120, 34, 0.12);
-  --border-glass-hover: rgba(215, 120, 34, 0.28);
+  --border: rgba(194, 132, 63, 0.14);
+  --border-glass: rgba(194, 132, 63, 0.08);
+  --border-glass-hover: rgba(194, 132, 63, 0.18);
   
-  --shadow-xs: 0 1px 3px 0 rgba(115, 74, 32, 0.08);
-  --shadow-sm: 0 4px 12px -2px rgba(115, 74, 32, 0.12);
-  --shadow-md: 0 8px 24px -4px rgba(115, 74, 32, 0.14);
-  --shadow-lg: 0 16px 40px -8px rgba(115, 74, 32, 0.18);
-  --shadow-xl: 0 24px 56px -12px rgba(115, 74, 32, 0.22);
-  --shadow-glow: 0 0 32px rgba(255, 138, 31, 0.12);
+  --shadow-xs: 0 1px 3px 0 rgba(115, 74, 32, 0.05);
+  --shadow-sm: 0 4px 12px -2px rgba(115, 74, 32, 0.08);
+  --shadow-md: 0 8px 24px -4px rgba(115, 74, 32, 0.1);
+  --shadow-lg: 0 16px 40px -8px rgba(115, 74, 32, 0.12);
+  --shadow-xl: 0 24px 56px -12px rgba(115, 74, 32, 0.16);
+  --shadow-glow: 0 0 28px rgba(234, 122, 24, 0.08);
 
   --bg-default: var(--bg-base);
   --bg-card: var(--bg-surface);
@@ -131,6 +131,7 @@ body {
   overflow-x: hidden;
   position: relative;
   letter-spacing: var(--kz-spacing);
+  transition: background-color 220ms ease, color 220ms ease;
 }
 
 /* Premium Animated Mesh Background */
@@ -152,11 +153,11 @@ body::before {
 
 [data-theme='light'] body::before {
   background: 
-    radial-gradient(circle at 15% 20%, rgba(255, 174, 90, 0.22) 0%, transparent 48%),
-    radial-gradient(circle at 82% 18%, rgba(249, 115, 22, 0.12) 0%, transparent 38%),
-    radial-gradient(circle at 78% 82%, rgba(255, 208, 138, 0.2) 0%, transparent 46%),
-    radial-gradient(circle at 50% 50%, rgba(255, 250, 245, 0.55) 0%, transparent 68%);
-  filter: blur(90px);
+    radial-gradient(circle at 15% 20%, rgba(255, 174, 90, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 82% 18%, rgba(234, 122, 24, 0.07) 0%, transparent 40%),
+    radial-gradient(circle at 78% 82%, rgba(255, 215, 165, 0.14) 0%, transparent 48%),
+    radial-gradient(circle at 50% 50%, rgba(255, 253, 249, 0.62) 0%, transparent 72%);
+  filter: blur(120px);
 }
 
 @keyframes bgShift {
@@ -186,7 +187,7 @@ body::after {
   opacity: 0.035; /* subtle film grain */
 }
 [data-theme='light'] body::after {
-  opacity: 0.015;
+  opacity: 0.008;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -215,7 +216,7 @@ h6 { font-size: 1rem; line-height: 1.5; }
 }
 
 [data-theme='light'] .glass-panel {
-  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
 .glass-panel:hover {
@@ -234,7 +235,7 @@ h6 { font-size: 1rem; line-height: 1.5; }
 }
 
 [data-theme='light'] .text-gradient {
-  filter: drop-shadow(0 0 12px rgba(255, 138, 31, 0.14));
+  filter: drop-shadow(0 0 10px rgba(234, 122, 24, 0.08));
 }
 
 /* Premium Animations */

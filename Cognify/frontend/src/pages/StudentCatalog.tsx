@@ -124,7 +124,7 @@ export const StudentCatalog = () => {
       .catch((err) => {
         if (err.name !== 'AbortError') {
           console.error("Error fetching courses:", err);
-          showToast({ description: 'Unable to load courses. Please refresh.', variant: 'error' });
+          showToast({ description: 'Не удалось загрузить курсы. Обновите страницу.', variant: 'error' });
         }
       })
       .finally(() => setIsLoading(false));
@@ -278,13 +278,13 @@ export const StudentCatalog = () => {
               <div key={course.id} className={styles.communityCard}>
                 <div className={styles.communityCardHeader}>
                   <h4 className={styles.communityCardTitle}>{course.title}</h4>
-                  <span className={styles.communityBadge}>Community</span>
+                  <span className={styles.communityBadge}>{t('student.catalog.communityBadge', 'Сообщество')}</span>
                 </div>
-                <p className={styles.communityCardDesc}>{course.description || 'A unique learning path shared by the community.'}</p>
+                <p className={styles.communityCardDesc}>{course.description || 'Уникальный учебный путь, созданный сообществом.'}</p>
                 <div className={styles.communityCardFooter}>
-                  <span>{course.teacher?.name || course.teacher_name || 'Community creator'}</span>
+                  <span>{course.teacher?.name || course.teacher_name || 'Автор сообщества'}</span>
                   <button className={styles.communityAction} type="button" onClick={() => navigate(`/course/${course.id}`)}>
-                    View course
+                    {t('student.catalog.viewMore', 'Подробнее')}
                   </button>
                 </div>
               </div>

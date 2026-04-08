@@ -940,7 +940,7 @@ export const CourseView = () => {
                     Voice: Read Aloud
                   </Button>
                   <Button size="sm" variant="secondary" onClick={makeTranscript}>
-                    Auto Transcript
+                    Автотранскрипт
                   </Button>
                 </div>
                 {transcript && (
@@ -968,13 +968,13 @@ export const CourseView = () => {
                 />
               </div>
             ) : (
-              <p>Select a lesson from the sidebar.</p>
+              <p>Выберите урок в боковой панели.</p>
             )}
           </div>
 
           {user?.role?.toUpperCase() === 'STUDENT' && progressPercent >= 100 && quizQuestions.length > 0 && (
             <div style={{ marginTop: '1.5rem', borderTop: '1px solid var(--border-glass)', paddingTop: '1rem' }}>
-              <h3 style={{ marginBottom: '0.75rem' }}>Final Test</h3>
+              <h3 style={{ marginBottom: '0.75rem' }}>Итоговый тест</h3>
               {quizQuestions.map((question, index) => (
                 <div key={question.id} style={{ marginBottom: '0.9rem' }}>
                   <div style={{ marginBottom: '0.45rem' }}>
@@ -1000,17 +1000,17 @@ export const CourseView = () => {
                   </div>
                 </div>
               ))}
-              <Button onClick={submitQuiz}>Submit Test</Button>
+              <Button onClick={submitQuiz}>Отправить тест</Button>
               {assessmentScore !== null && (
                 <p style={{ marginTop: '0.75rem' }}>
-                  Test score: <strong>{assessmentScore}%</strong>
+                  Балл теста: <strong>{assessmentScore}%</strong>
                 </p>
               )}
               {quizHint && <p style={{ marginTop: '0.4rem', color: 'var(--text-secondary)' }}>{quizHint}</p>}
 
               {adaptiveQuestion && (
                 <div style={{ marginTop: '1rem', borderTop: '1px solid var(--border-glass)', paddingTop: '0.8rem' }}>
-                  <h4 style={{ marginBottom: '0.5rem' }}>Adaptive Question</h4>
+                  <h4 style={{ marginBottom: '0.5rem' }}>Адаптивный вопрос</h4>
                   <p style={{ marginBottom: '0.45rem', color: 'var(--text-secondary)' }}>{adaptiveQuestion.prompt}</p>
                   <div style={{ display: 'flex', gap: '0.45rem', flexWrap: 'wrap' }}>
                     {adaptiveQuestion.options.map((option) => (

@@ -109,33 +109,33 @@
 
 /* Light Theme Card Enhancements */
 [data-theme='light'] .card {
-  background: linear-gradient(135deg, var(--bg-glass), rgba(35, 24, 18, 0.8));
+  background: linear-gradient(135deg, var(--bg-glass), rgba(255, 248, 240, 0.9));
   border: 1.5px solid var(--border);
   box-shadow: 
-    0 4px 12px -4px rgba(15, 23, 42, 0.08),
-    inset 0 1px 0 rgba(255,255,255,0.6),
-    inset 0 0 1px rgba(255,255,255,0.8);
+    0 4px 12px -4px rgba(115, 74, 32, 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.55),
+    inset 0 0 1px rgba(255,255,255,0.65);
 }
 
 [data-theme='light'] .card::before {
-  background: radial-gradient(circle at top right, rgba(251, 146, 60, 0.05), transparent 65%);
+  background: radial-gradient(circle at top right, rgba(234, 122, 24, 0.03), transparent 68%);
 }
 
 [data-theme='light'] .interactive:hover {
   border-color: var(--primary);
   box-shadow: 
-    0 8px 20px -4px rgba(15, 23, 42, 0.12),
-    0 0 20px rgba(251, 146, 60, 0.15),
-    inset 0 1px 0 rgba(255,255,255,0.7),
-    inset 0 0 2px rgba(255,255,255,0.8);
+    0 8px 20px -4px rgba(115, 74, 32, 0.1),
+    0 0 16px rgba(234, 122, 24, 0.1),
+    inset 0 1px 0 rgba(255,255,255,0.62),
+    inset 0 0 2px rgba(255,255,255,0.72);
 }
 
 [data-theme='light'] .header {
-  background: linear-gradient(180deg, rgba(249, 115, 22, 0.03), transparent);
-  border-bottom: 1px solid rgba(251, 146, 60, 0.1);
+  background: linear-gradient(180deg, rgba(234, 122, 24, 0.025), transparent);
+  border-bottom: 1px solid rgba(194, 132, 63, 0.08);
 }
 
 [data-theme='light'] .footer {
-  background: linear-gradient(180deg, transparent, rgba(249, 115, 22, 0.02));
-  border-top: 1px solid rgba(251, 146, 60, 0.1);
+  background: linear-gradient(180deg, transparent, rgba(234, 122, 24, 0.015));
+  border-top: 1px solid rgba(194, 132, 63, 0.08);
 }

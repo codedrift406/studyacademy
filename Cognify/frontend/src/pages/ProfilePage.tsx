@@ -44,11 +44,13 @@ export const ProfilePage = () => {
   const [integrationForm, setIntegrationForm] = useState<Record<string, { webhook: string; enabled: boolean }>>({});
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+
   const load = async () => {
     const [profileRes, notificationsRes] = await Promise.all([
       authFetch('/api/profile/me'),
       authFetch('/api/notifications/me'),
     ]);
+
     let role: string | null = null;
     if (profileRes.ok) {
       const data = await profileRes.json();
@@ -60,6 +62,7 @@ export const ProfilePage = () => {
       setAvatarUrl(p.avatarUrl || '');
       role = p.role;
     }
+
     if (notificationsRes.ok) {
       const data = await notificationsRes.json();
       setNotifications((data.notifications || []) as NotificationItem[]);
@@ -151,13 +154,13 @@ export const ProfilePage = () => {
       <Card interactive>
         <CardBody>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <h1 className="text-gradient" style={{ fontSize: '2rem', marginBottom: '0.9rem' }}>{t('profile.title', 'Profile')}</h1>
+            <h1 className="text-gradient" style={{ fontSize: '2rem', marginBottom: '0.9rem' }}>{t('profile.title', 'Профиль')}</h1>
           </div>
           {avatarUrl && (
             <div style={{ marginBottom: '0.9rem' }}>
               <img
                 src={avatarUrl}
-                alt="profile avatar preview"
+                alt="Предпросмотр аватара профиля"
                 style={{
                   width: 88,
                   height: 88,
@@ -169,15 +172,15 @@ export const ProfilePage = () => {
             </div>
           )}
           <form onSubmit={submit} style={{ display: 'grid', gap: '0.75rem' }}>
-            <Input label={t('profile.fullName', 'Full name')} value={name} onChange={(event) => setName(event.target.value)} />
-            <Input label={t('profile.nickname', 'Nickname')} value={nickname} onChange={(event) => setNickname(event.target.value)} />
-            <Input label={t('profile.photoUrl', 'Photo URL')} value={avatarUrl} onChange={(event) => setAvatarUrl(event.target.value)} />
+            <Input label={t('profile.fullName', 'Полное имя')} value={name} onChange={(event) => setName(event.target.value)} />
+            <Input label={t('profile.nickname', 'Никнейм')} value={nickname} onChange={(event) => setNickname(event.target.value)} />
+            <Input label={t('profile.photoUrl', 'URL фото')} value={avatarUrl} onChange={(event) => setAvatarUrl(event.target.value)} />
             <label>
-              <div style={{ marginBottom: '0.35rem', color: 'var(--text-secondary)' }}>{t('profile.uploadAvatar', 'Upload avatar')}</div>
+              <div style={{ marginBottom: '0.35rem', color: 'var(--text-secondary)' }}>{t('profile.uploadAvatar', 'Загрузить аватар')}</div>
               <input type="file" accept="image/*" onChange={(event) => setAvatarFile(event.target.files?.[0] || null)} />
             </label>
             <label style={{ display: 'block' }}>
-              <div style={{ marginBottom: '0.35rem', color: 'var(--text-secondary)' }}>{t('profile.description', 'Description')}</div>
+              <div style={{ marginBottom: '0.35rem', color: 'var(--text-secondary)' }}>{t('profile.description', 'Описание')}</div>
               <textarea
                 value={bio}
                 onChange={(event) => setBio(event.target.value)}
@@ -194,12 +197,16 @@ export const ProfilePage = () => {
             </label>
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center', marginTop: '1rem' }}>
               <Button type="submit" icon={<Save size={16} />} disabled={saving}>
-                {saving ? t('profile.saving', 'Saving...') : t('profile.saveButton', 'Save Profile')}
+                {saving ? t('profile.saving', 'Сохранение...') : t('profile.saveButton', 'Сохранить профиль')}
               </Button>
               <div className="glass-panel" style={{ padding: '0.5rem 1rem', display: 'flex', gap: '1rem', alignItems: 'center', borderRadius: '12px' }}>
-                <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>{t('profile.xp', 'XP:')} <span style={{ color: 'var(--primary-light)' }}>{profile?.xp ?? 0}</span></span>
-                <div style={{ width: '1px', height: '14px', background: 'var(--border-glass)' }}></div>
-                <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>{t('profile.streak', 'Streak:')} <span style={{ color: 'var(--secondary)' }}>{profile?.streakDays ?? 0}</span> {t('profile.days', 'days')} 🔥</span>
+                <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>
+                  {t('profile.xp', 'XP:')} <span style={{ color: 'var(--primary-light)' }}>{profile?.xp ?? 0}</span>
+                </span>
+                <div style={{ width: '1px', height: '14px', background: 'var(--border-glass)' }} />
+                <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>
+                  {t('profile.streak', 'Серия:')} <span style={{ color: 'var(--secondary)' }}>{profile?.streakDays ?? 0}</span> {t('profile.days', 'дней')} 🔥
+                </span>
               </div>
             </div>
           </form>
@@ -210,12 +217,12 @@ export const ProfilePage = () => {
         <CardBody>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-glass)', paddingBottom: '0.5rem' }}>
             <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)' }}>
-              <Bell size={18} className="text-primary" /> {t('profile.notifications', 'Notifications')}
+              <Bell size={18} className="text-primary" /> {t('profile.notifications', 'Уведомления')}
             </h3>
-            <Button size="sm" variant="secondary" onClick={markAllRead}>{t('profile.markAllRead', 'Mark all read')}</Button>
+            <Button size="sm" variant="secondary" onClick={markAllRead}>{t('profile.markAllRead', 'Отметить все как прочитанные')}</Button>
           </div>
           {notifications.length === 0 ? (
-            <p style={{ color: 'var(--text-secondary)' }}>{t('profile.noNotifications', 'No notifications yet.')}</p>
+            <p style={{ color: 'var(--text-secondary)' }}>{t('profile.noNotifications', 'Уведомлений пока нет.')}</p>
           ) : (
             notifications.slice(0, 15).map((item) => (
               <div key={item.id} style={{ padding: '0.6rem 0', borderTop: '1px solid var(--border-glass)' }}>
@@ -230,9 +237,9 @@ export const ProfilePage = () => {
       {(profile?.role === 'TEACHER' || profile?.role === 'ADMIN') && (
         <Card interactive style={{ marginTop: '1rem' }}>
           <CardBody>
-            <h3 style={{ marginBottom: '0.75rem', fontSize: '1.4rem' }}>{t('profile.integrations', 'Integrations')}</h3>
+            <h3 style={{ marginBottom: '0.75rem', fontSize: '1.4rem' }}>{t('profile.integrations', 'Интеграции')}</h3>
             <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-              {t('profile.integrationsDesc', 'Google Classroom, Moodle, Telegram, Email via webhook endpoints.')}
+              {t('profile.integrationsDesc', 'Google Classroom, Moodle, Telegram и Email через webhook-эндпоинты.')}
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
               {providers.map((provider) => {
@@ -249,7 +256,7 @@ export const ProfilePage = () => {
                           [provider]: { ...item, webhook: e.target.value },
                         }))
                       }
-                      placeholder={t('profile.webhookUrl', 'Webhook URL')}
+                      placeholder={t('profile.webhookUrl', 'URL webhook')}
                       style={{ width: '100%', padding: '0.65rem 1rem', marginBottom: '0.8rem' }}
                     />
                     <label style={{ display: 'flex', gap: '0.45rem', alignItems: 'center', marginBottom: '0.5rem' }}>
@@ -263,11 +270,11 @@ export const ProfilePage = () => {
                           }))
                         }
                       />
-                      {t('profile.enabled', 'Enabled')}
+                      {t('profile.enabled', 'Включено')}
                     </label>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      <Button size="sm" onClick={() => saveIntegration(provider)}>{t('profile.save', 'Save')}</Button>
-                      <Button size="sm" variant="secondary" onClick={() => testIntegration(provider)}>{t('profile.test', 'Test')}</Button>
+                      <Button size="sm" onClick={() => saveIntegration(provider)}>{t('profile.save', 'Сохранить')}</Button>
+                      <Button size="sm" variant="secondary" onClick={() => testIntegration(provider)}>{t('profile.test', 'Тест')}</Button>
                     </div>
                   </div>
                 );

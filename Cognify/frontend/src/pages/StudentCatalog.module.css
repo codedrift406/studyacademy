@@ -458,3 +458,43 @@
   color: var(--text-secondary);
   font-weight: 600;
 }
+
+@media (max-width: 960px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .searchContainer {
+    max-width: 100%;
+  }
+
+  .courseGrid,
+  .communityGrid,
+  .resourceGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .communitySection {
+    padding: 1rem;
+  }
+
+  .paginationWrap {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .courseCardHeader,
+  .communityCardHeader,
+  .communityCardFooter {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cardFooter {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

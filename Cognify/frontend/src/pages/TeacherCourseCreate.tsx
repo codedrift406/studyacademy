@@ -107,7 +107,7 @@ export const TeacherCourseCreate = () => {
 
   const handleGenerate = async () => {
     if (!topic || !user) {
-      showToast({ description: 'Enter a course topic to generate a structure.', variant: 'warning' });
+      showToast({ description: 'Введите тему курса, чтобы сгенерировать структуру.', variant: 'warning' });
       return;
     }
     setIsGenerating(true);
@@ -127,7 +127,7 @@ export const TeacherCourseCreate = () => {
 
       if (!response.ok) {
         const errorText = await response.text();
-        showToast({ description: `AI generation failed: ${errorText || 'Please try again.'}`, variant: 'error' });
+        showToast({ description: `Ошибка генерации ИИ: ${errorText || 'Попробуйте ещё раз.'}`, variant: 'error' });
         return;
       }
 
@@ -136,12 +136,12 @@ export const TeacherCourseCreate = () => {
         setGeneratedCourseId(data.course.id);
       }
       setGeneratedBlueprint(data.blueprint || null);
-      showToast({ description: 'Course structure generated successfully.', variant: 'success' });
+      showToast({ description: 'Структура курса успешно сгенерирована.', variant: 'success' });
       setIsDone(true);
     } catch (err) {
       if (err instanceof Error && err.name !== 'AbortError') {
         console.error(err);
-        showToast({ description: 'AI generation failed. Please try again.', variant: 'error' });
+        showToast({ description: 'Ошибка генерации ИИ. Попробуйте ещё раз.', variant: 'error' });
       }
     } finally {
       setIsGenerating(false);
@@ -150,7 +150,7 @@ export const TeacherCourseCreate = () => {
 
   const handleManualSave = async () => {
     if (!manualTitle || !user) {
-      showToast({ description: 'Please provide a title to save the course.', variant: 'warning' });
+      showToast({ description: 'Укажите название, чтобы сохранить курс.', variant: 'warning' });
       return;
     }
     setIsSaving(true);
@@ -174,7 +174,7 @@ export const TeacherCourseCreate = () => {
 
       if (!response.ok) {
         const errorText = await response.text();
-        showToast({ description: `Save failed: ${errorText || 'Please try again.'}`, variant: 'error' });
+        showToast({ description: `Ошибка сохранения: ${errorText || 'Попробуйте ещё раз.'}`, variant: 'error' });
         return;
       }
 
@@ -183,11 +183,11 @@ export const TeacherCourseCreate = () => {
         setGeneratedCourseId(data.course.id);
       }
       setGeneratedBlueprint(null);
-      showToast({ description: isEditMode ? 'Course updated successfully.' : 'Course created successfully.', variant: 'success' });
+      showToast({ description: isEditMode ? 'Курс успешно обновлён.' : 'Курс успешно создан.', variant: 'success' });
       setIsDone(true);
     } catch (err) {
       console.error(err);
-      showToast({ description: 'Unable to save the course. Please try again.', variant: 'error' });
+      showToast({ description: 'Не удалось сохранить курс. Попробуйте ещё раз.', variant: 'error' });
     } finally {
       setIsSaving(false);
     }
@@ -216,22 +216,22 @@ export const TeacherCourseCreate = () => {
         <Card className={styles.successCard}>
           <CardBody className={styles.successContent}>
             <CheckCircle2 size={64} className={styles.successIcon} />
-            <h2 className={styles.successTitle}>{isEditMode ? 'Course Updated!' : 'Course Created!'}</h2>
+            <h2 className={styles.successTitle}>{isEditMode ? 'Курс обновлён!' : 'Курс создан!'}</h2>
             <p className={styles.successText}>
-              Your course "{creationMode === 'ai' ? topic : manualTitle}" is now live and ready for students.
+              Ваш курс "{creationMode === 'ai' ? topic : manualTitle}" уже опубликован и готов для студентов.
             </p>
             <div className={styles.successActions}>
               <Button onClick={() => generatedCourseId ? navigate(`/course/${generatedCourseId}`) : navigate('/teacher/dashboard')}>
-                View Course
+                Открыть курс
               </Button>
               <Button variant="secondary" onClick={() => { setIsDone(false); setTopic(''); setManualTitle(''); setManualLessons([{ title: '', content: '' }]); setGeneratedBlueprint(null); setGeneratedCourseId(null); }}>
-                Create Another
+                Создать ещё
               </Button>
             </div>
             {generatedBlueprint && (
               <div style={{ width: '100%', marginTop: '1rem', textAlign: 'left', display: 'grid', gap: '0.85rem' }}>
                 <div style={{ padding: '0.85rem 1rem', borderRadius: 14, border: '1px solid var(--border-glass)', background: 'color-mix(in srgb, var(--bg-surface) 82%, transparent)' }}>
-                  <strong style={{ display: 'block', marginBottom: '0.45rem' }}>AI criteria used</strong>
+                  <strong style={{ display: 'block', marginBottom: '0.45rem' }}>Критерии ИИ</strong>
                   <ul style={{ margin: 0, paddingLeft: '1.1rem', color: 'var(--text-secondary)' }}>
                     {generatedBlueprint.criteria.slice(0, 5).map((criterion) => (
                       <li key={criterion} style={{ marginBottom: '0.35rem' }}>{criterion}</li>
@@ -240,7 +240,7 @@ export const TeacherCourseCreate = () => {
                 </div>
                 {generatedBlueprint.suggestedVideos.length > 0 && (
                   <div style={{ padding: '0.85rem 1rem', borderRadius: 14, border: '1px solid var(--border-glass)', background: 'color-mix(in srgb, var(--bg-surface) 82%, transparent)' }}>
-                    <strong style={{ display: 'block', marginBottom: '0.45rem' }}>Attached videos</strong>
+                    <strong style={{ display: 'block', marginBottom: '0.45rem' }}>Прикреплённые видео</strong>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                       {generatedBlueprint.suggestedVideos.map((video) => (
                         <span key={video.url} style={{ padding: '0.35rem 0.65rem', borderRadius: 999, border: '1px solid var(--border-glass)', color: 'var(--text-secondary)' }}>
@@ -262,8 +262,8 @@ export const TeacherCourseCreate = () => {
     <div className={styles.container}>
       <header className={styles.pageHeader}>
         <div>
-          <h1 className="text-gradient" style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Create New Course</h1>
-          <p className={styles.headerText}>{isEditMode ? 'Update your existing course and lessons.' : 'Choose a creation method below to get started.'}</p>
+          <h1 className="text-gradient" style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>{isEditMode ? 'Редактирование курса' : 'Создание нового курса'}</h1>
+          <p className={styles.headerText}>{isEditMode ? 'Обновите уже существующий курс и уроки.' : 'Выберите способ создания ниже, чтобы начать.'}</p>
         </div>
       </header>
 
@@ -273,13 +273,13 @@ export const TeacherCourseCreate = () => {
           className={`${styles.tabBtn} ${creationMode === 'ai' ? styles.activeTab : ''}`}
           onClick={() => setCreationMode('ai')}
         >
-          <Sparkles size={20} /> AI Wizard
+          <Sparkles size={20} /> ИИ-мастер
         </button>
         <button 
           className={`${styles.tabBtn} ${creationMode === 'manual' ? styles.activeTab : ''}`}
           onClick={() => setCreationMode('manual')}
         >
-          <PenTool size={20} /> Classic Creator
+          <PenTool size={20} /> Ручное создание
         </button>
       </div>
 
@@ -288,7 +288,7 @@ export const TeacherCourseCreate = () => {
           <div className={styles.glowBox}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
               <div className={styles.iconCircle}><Sparkles size={20} /></div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 600 }}>Build with AI</h3>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 600 }}>Создать с помощью ИИ</h3>
             </div>
             
             <textarea 
@@ -301,17 +301,17 @@ export const TeacherCourseCreate = () => {
             />
 
             <div style={{ marginBottom: '2rem' }}>
-              <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Suggestions:</span>
+              <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Подсказки:</span>
               <div className={styles.tags}>
                 <span className={styles.tag} onClick={() => setTopic('Modern Web Architecture')}>Web Arch</span>
-                <span className={styles.tag} onClick={() => setTopic('Practical Cybersecurity for Small Business')}>Cybersecurity</span>
+                <span className={styles.tag} onClick={() => setTopic('Practical Cybersecurity for Small Business')}>Кибербезопасность</span>
                 <span className={styles.tag} onClick={() => setTopic('Foundations of UX/UI Design')}>UI/UX Design</span>
               </div>
             </div>
 
             <div style={{ display: 'grid', gap: '0.8rem', marginBottom: '1rem' }}>
               <label>
-                <div style={{ marginBottom: '0.35rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Template</div>
+                <div style={{ marginBottom: '0.35rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Шаблон</div>
                 <select
                   value={templateKey}
                   onChange={(e) => setTemplateKey(e.target.value as 'bootcamp' | 'academic' | 'corporate' | 'exam')}
@@ -319,28 +319,28 @@ export const TeacherCourseCreate = () => {
                   style={{ minHeight: 44, height: 44, padding: '0 0.8rem' }}
                 >
                   <option value="bootcamp">Bootcamp</option>
-                  <option value="academic">Academic</option>
-                  <option value="corporate">Corporate</option>
-                  <option value="exam">Exam Prep</option>
+                  <option value="academic">Академический</option>
+                  <option value="corporate">Корпоративный</option>
+                  <option value="exam">Подготовка к экзамену</option>
                 </select>
               </label>
 
               <label>
-                <div style={{ marginBottom: '0.35rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Level</div>
+                <div style={{ marginBottom: '0.35rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Уровень</div>
                 <select
                   value={level}
                   onChange={(e) => setLevel(e.target.value as 'beginner' | 'intermediate' | 'advanced')}
                   className={styles.textarea}
                   style={{ minHeight: 44, height: 44, padding: '0 0.8rem' }}
                 >
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
+                  <option value="beginner">Начальный</option>
+                  <option value="intermediate">Средний</option>
+                  <option value="advanced">Продвинутый</option>
                 </select>
               </label>
 
               <label>
-                <div style={{ marginBottom: '0.35rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Language</div>
+                <div style={{ marginBottom: '0.35rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Язык</div>
                 <select
                   value={language}
                   onChange={(e) => setLanguage(e.target.value as 'en' | 'ru' | 'kk')}
@@ -348,27 +348,27 @@ export const TeacherCourseCreate = () => {
                   style={{ minHeight: 44, height: 44, padding: '0 0.8rem' }}
                 >
                   <option value="en">English</option>
-                  <option value="ru">Russian</option>
-                  <option value="kk">Kazakh</option>
+                  <option value="ru">Русский</option>
+                  <option value="kk">Қазақша</option>
                 </select>
               </label>
 
               <Input
-                label="Target Audience"
-                placeholder="E.g. first-year university students"
+                label="Целевая аудитория"
+                placeholder="Например: студенты первого курса"
                 value={targetAudience}
                 onChange={(e) => setTargetAudience(e.target.value)}
               />
 
               <Input
-                label="Course Goal"
-                placeholder="E.g. prepare students to design AI-assisted lessons"
+                label="Цель курса"
+                placeholder="Например: подготовить студентов к созданию уроков с ИИ"
                 value={courseGoal}
                 onChange={(e) => setCourseGoal(e.target.value)}
               />
 
               <label>
-                <div style={{ marginBottom: '0.35rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Duration (weeks)</div>
+                <div style={{ marginBottom: '0.35rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Длительность (недели)</div>
                 <input
                   type="number"
                   min={1}
@@ -383,16 +383,16 @@ export const TeacherCourseCreate = () => {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem', marginBottom: '1rem' }}>
               <div style={{ border: '1px solid var(--border-glass)', borderRadius: 12, padding: '0.8rem' }}>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Structure</div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Структура</div>
                 <strong>{templateKey}</strong>
               </div>
               <div style={{ border: '1px solid var(--border-glass)', borderRadius: 12, padding: '0.8rem' }}>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Audience</div>
-                <strong>{targetAudience || 'General learners'}</strong>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Аудитория</div>
+                <strong>{targetAudience || 'Общие слушатели'}</strong>
               </div>
               <div style={{ border: '1px solid var(--border-glass)', borderRadius: 12, padding: '0.8rem' }}>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Duration</div>
-                <strong>{durationWeeks} weeks</strong>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Длительность</div>
+                <strong>{durationWeeks} недель</strong>
               </div>
             </div>
 
@@ -403,7 +403,7 @@ export const TeacherCourseCreate = () => {
               disabled={isGenerating || !topic.trim()}
               icon={isGenerating ? <Loader2 className="animate-spin" /> : <Sparkles size={18} />}
             >
-              {isGenerating ? 'Generating Curriculum...' : 'Generate Course Structure'}
+              {isGenerating ? 'Генерация программы...' : 'Сгенерировать структуру курса'}
             </Button>
           </div>
         ) : (
@@ -411,24 +411,24 @@ export const TeacherCourseCreate = () => {
             <div className={styles.manualForm}>
               <div className={styles.inputGroup}>
                 <Input 
-                  label="Course Title"
-                  placeholder="E.g. Complete JavaScript Mastery"
+                  label="Название курса"
+                  placeholder="Например: Полное освоение JavaScript"
                   value={manualTitle}
                   onChange={(e) => setManualTitle(e.target.value)}
                 />
               </div>
               <div className={styles.inputGroup}>
-                <label className={styles.label}>Course Description</label>
+                <label className={styles.label}>Описание курса</label>
                 <textarea 
                   className={styles.textarea}
                   style={{ height: '100px', minHeight: '100px' }}
-                  placeholder="Describe your course goals and target audience..."
+                  placeholder="Опишите цели курса и целевую аудиторию..."
                   value={manualDescription}
                   onChange={(e) => setManualDescription(e.target.value)}
                 />
               </div>
               <div className={styles.inputGroup}>
-                <label className={styles.label}>Language</label>
+                <label className={styles.label}>Язык</label>
                 <select
                   value={manualLanguage}
                   onChange={(e) => setManualLanguage(e.target.value as 'en' | 'ru' | 'kk')}
@@ -436,32 +436,32 @@ export const TeacherCourseCreate = () => {
                   style={{ minHeight: '52px', width: '100%', padding: '0 1rem' }}
                 >
                   <option value="en">English</option>
-                  <option value="ru">Russian</option>
-                  <option value="kk">Kazakh</option>
+                  <option value="ru">Русский</option>
+                  <option value="kk">Қазақша</option>
                 </select>
               </div>
               <div className={styles.inputGroup}>
                 <Input
-                  label="Target Audience"
-                  placeholder="E.g. drone operators, agronomy students"
+                  label="Целевая аудитория"
+                  placeholder="Например: операторы дронов, студенты-агрономы"
                   value={manualAudience}
                   onChange={(e) => setManualAudience(e.target.value)}
                 />
               </div>
               <div className={styles.inputGroup}>
                 <Input
-                  label="Estimated Weeks"
+                  label="Оценка по неделям"
                   type="number"
                   value={String(manualWeeks)}
                   onChange={(e) => setManualWeeks(Number(e.target.value) || 4)}
                 />
               </div>
               <div className={styles.inputGroup}>
-                <label className={styles.label}>Learning Goals</label>
+                <label className={styles.label}>Цели обучения</label>
                 <textarea
                   className="glass-input"
                   style={{ height: '120px', minHeight: '120px', width: '100%', padding: '1rem' }}
-                  placeholder="One goal per line"
+                  placeholder="Одна цель на строку"
                   value={manualGoals}
                   onChange={(e) => setManualGoals(e.target.value)}
                 />
@@ -469,8 +469,8 @@ export const TeacherCourseCreate = () => {
 
               <div className={styles.lessonsSection}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1.5rem' }}>
-                  <h4 style={{ fontSize: '1.25rem', fontWeight: 600 }}>Lessons Structure</h4>
-                  <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>{manualLessons.length} lessons added</span>
+                  <h4 style={{ fontSize: '1.25rem', fontWeight: 600 }}>Структура уроков</h4>
+                  <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>{manualLessons.length} уроков добавлено</span>
                 </div>
 
                 {manualLessons.map((lesson, idx) => (
@@ -483,13 +483,13 @@ export const TeacherCourseCreate = () => {
                     </div>
                     <input 
                       className={styles.lessonInput}
-                      placeholder="Lesson Title (e.g. Introduction to Variables)"
+                      placeholder="Название урока (например: Введение в переменные)"
                       value={lesson.title}
                       onChange={(e) => updateLesson(idx, 'title', e.target.value)}
                     />
                     <textarea 
                       className={styles.lessonTextarea}
-                      placeholder="Lesson content or description..."
+                      placeholder="Содержание или описание урока..."
                       value={lesson.content}
                       onChange={(e) => updateLesson(idx, 'content', e.target.value)}
                     />
@@ -497,7 +497,7 @@ export const TeacherCourseCreate = () => {
                 ))}
 
                 <button className={styles.addLessonBtn} onClick={addLesson}>
-                  <Plus size={18} /> Add New Lesson
+                  <Plus size={18} /> Добавить урок
                 </button>
               </div>
 
@@ -509,7 +509,7 @@ export const TeacherCourseCreate = () => {
                   disabled={isSaving || !manualTitle.trim()}
                   icon={isSaving ? <Loader2 className="animate-spin" /> : <BookOpen size={18} />}
                 >
-                  {isSaving ? (isEditMode ? 'Updating Course...' : 'Creating Course...') : (isEditMode ? 'Update Course' : 'Create Course Now')}
+                  {isSaving ? (isEditMode ? 'Обновление курса...' : 'Создание курса...') : (isEditMode ? 'Обновить курс' : 'Создать курс')}
                 </Button>
               </div>
             </div>
