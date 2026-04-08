@@ -2,3 +2,9 @@
   width: 100%;
   min-height: 100%;
 }
+
+.blockCon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

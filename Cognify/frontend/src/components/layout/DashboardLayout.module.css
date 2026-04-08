@@ -346,6 +346,27 @@ a:hover {
   width: 100%;
 }
 
+.blocked {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.conBlock {
+  background: rgba(205, 202, 202, 0.912);
+
+  /* Экстремальный блюр для превращения контента в "молоко" */
+  backdrop-filter: blur(40px) saturate(100%);
+  -webkit-backdrop-filter: blur(40px) saturate(100%);
+}
+
+.contentBlock {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .pageFooter {
   margin-top: 2rem;
   padding: 1rem 0 0.5rem;

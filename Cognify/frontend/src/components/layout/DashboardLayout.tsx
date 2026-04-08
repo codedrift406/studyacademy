@@ -133,6 +133,10 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
     .slice(0, 2)
     .toUpperCase();
 
+  const Block =
+    location.pathname === "/student/ai-library" ||
+    location.pathname === "/teacher/ai-library";
+
   return (
     <div className={styles.layout}>
       {(isMobileMenuOpen || isDropMenu) && (
@@ -312,12 +316,33 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
             </div>
           </header>
 
-          <div className={styles.content}>
-            <PageTransition>{children}</PageTransition>
-            <footer className={styles.pageFooter}>
-              <span>Cognify © 2026. All rights reserved.</span>
-              <span>AI learning platform for students and teachers.</span>
-            </footer>
+          <div className={`${styles.content} ${Block ? styles.conBlock : ""}`}>
+            <PageTransition>
+              {Block ? (
+                <div className={styles.contentBlock}>
+                  <h1 className={styles.blocked}>
+                    Раздел находится в разработке
+                  </h1>
+                  <p
+                    style={{
+                      color: "#64748b",
+                      fontSize: "0.9rem",
+                      marginTop: "8px",
+                    }}
+                  >
+                    Совсем скоро здесь появится новый функционал
+                  </p>
+                </div>
+              ) : (
+                children
+              )}
+            </PageTransition>
+            {!Block && (
+              <footer className={styles.pageFooter}>
+                <span>Cognify © 2026. All rights reserved.</span>
+                <span>AI learning platform for students and teachers.</span>
+              </footer>
+            )}
           </div>
         </main>
       </div>

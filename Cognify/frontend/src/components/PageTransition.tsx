@@ -1,6 +1,6 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
-import styles from './PageTransition.module.css';
+import { AnimatePresence, motion } from "framer-motion";
+import { useLocation } from "react-router-dom";
+import styles from "./PageTransition.module.css";
 
 interface PageTransitionProps {
   children: React.ReactNode;
@@ -8,12 +8,15 @@ interface PageTransitionProps {
 
 export const PageTransition = ({ children }: PageTransitionProps) => {
   const location = useLocation();
+  const block =
+    location.pathname === "/student/ai-library" ||
+    location.pathname === "/teacher/ai-library";
 
   return (
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={location.pathname}
-        className={styles.pageWrapper}
+        className={`${styles.pageWrapper} ${block ? styles.blockCon : ""}`}
         initial={{ opacity: 0, y: 28, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: -18, scale: 0.98 }}
