@@ -107,14 +107,14 @@ export const TeacherDashboard = () => {
       </div>
 
       <div className={styles.statsGrid}>
-        <Card className={styles.statCardGlow} style={{ '--glow-color': 'rgba(99, 102, 241, 0.1)', '--glow-stroke': 'rgba(99, 102, 241, 0.4)' } as any}>
+        <Card className={styles.statCardGlow} style={{ '--glow-color': 'rgba(249, 115, 22, 0.1)', '--glow-stroke': 'rgba(251, 146, 60, 0.4)' } as any}>
           <CardBody>
             <div className={styles.statLabel}><Users size={20} /> {t('teacher.totalStudents', 'Total Students')}</div>
             {isLoading ? <Skeleton width="60%" height="2rem" /> : <div className={styles.statValue}>{overview?.totalStudents || 0}</div>}
             <div className={styles.statChange}><TrendingUp size={14} /> {overview?.totalEnrollments || 0} enrollments</div>
           </CardBody>
         </Card>
-        <Card className={styles.statCardGlow} style={{ '--glow-color': 'rgba(168, 85, 247, 0.1)', '--glow-stroke': 'rgba(168, 85, 247, 0.4)' } as any}>
+        <Card className={styles.statCardGlow} style={{ '--glow-color': 'rgba(251, 146, 60, 0.1)', '--glow-stroke': 'rgba(255, 210, 138, 0.4)' } as any}>
           <CardBody>
             <div className={styles.statLabel}><BookOpen size={20} /> {t('teacher.activeCourses', 'Active Courses')}</div>
             {isLoading ? <Skeleton width="50%" height="2rem" /> : <div className={styles.statValue}>{overview?.totalCourses || courses.length}</div>}
@@ -128,11 +128,11 @@ export const TeacherDashboard = () => {
             <div className={styles.statChange} style={{ color: '#f43f5e' }}>Needs attention</div>
           </CardBody>
         </Card>
-        <Card className={styles.statCardGlow} style={{ '--glow-color': 'rgba(16, 185, 129, 0.1)', '--glow-stroke': 'rgba(16, 185, 129, 0.4)' } as any}>
+        <Card className={styles.statCardGlow} style={{ '--glow-color': 'rgba(251, 146, 60, 0.1)', '--glow-stroke': 'rgba(251, 146, 60, 0.4)' } as any}>
           <CardBody>
-            <div className={styles.statLabel}><TrendingUp size={20} style={{ color: '#10b981' }} /> {t('teacher.courseHealth', 'Course Health')}</div>
-            {isLoading ? <Skeleton width="55%" height="2rem" /> : <div className={styles.statValue} style={{ color: '#10b981' }}>{overview?.completionRate || 0}%</div>}
-            <div className={styles.statChange} style={{ color: '#10b981' }}>Avg Score: {overview?.averageScore ?? 0}%</div>
+            <div className={styles.statLabel}><TrendingUp size={20} style={{ color: '#fb923c' }} /> {t('teacher.courseHealth', 'Course Health')}</div>
+            {isLoading ? <Skeleton width="55%" height="2rem" /> : <div className={styles.statValue} style={{ color: '#fb923c' }}>{overview?.completionRate || 0}%</div>}
+            <div className={styles.statChange} style={{ color: '#fb923c' }}>Avg Score: {overview?.averageScore ?? 0}%</div>
           </CardBody>
         </Card>
       </div>
@@ -263,7 +263,7 @@ export const TeacherDashboard = () => {
             <h3 style={{ marginBottom: '1rem', fontSize: '1rem', fontWeight: 800 }}>Automation Snapshot</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px' }}>
-                  <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981' }}>
+                  <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(251, 146, 60, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fb923c' }}>
                     <CheckCircle2 size={16} />
                   </div>
                   <div>
@@ -272,7 +272,7 @@ export const TeacherDashboard = () => {
                   </div>
                </div>
                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px' }}>
-                  <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981' }}>
+                  <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(251, 146, 60, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fb923c' }}>
                     <CheckCircle2 size={16} />
                   </div>
                   <div>

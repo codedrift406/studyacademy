@@ -28,7 +28,7 @@
   width: 100%;
   padding: 1rem;
   border-radius: 12px;
-  background: linear-gradient(135deg, var(--bg-card), rgba(15, 27, 45, 0.5));
+  background: linear-gradient(135deg, var(--bg-card), rgba(28, 19, 13, 0.5));
   border: 1px solid var(--border-glass);
   color: var(--text-secondary);
   transition: all 0.2s ease;
@@ -42,17 +42,17 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.1), transparent);
+  background: radial-gradient(circle at top right, rgba(249, 115, 22, 0.1), transparent);
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
 }
 
 .lessonBtn:hover {
-  background: linear-gradient(135deg, var(--bg-hover), rgba(59, 130, 246, 0.05));
-  border-color: rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, var(--bg-hover), rgba(249, 115, 22, 0.05));
+  border-color: rgba(251, 146, 60, 0.3);
   transform: translateX(2px);
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 15px rgba(249, 115, 22, 0.1);
 }
 
 .lessonBtn:hover::before {
@@ -60,15 +60,15 @@
 }
 
 .lessonBtn.active {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(96, 165, 250, 0.08));
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(251, 146, 60, 0.08));
   border-color: var(--primary);
   color: var(--text-primary);
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.25);
 }
 
 .lessonBtn.active .icon {
   color: var(--primary);
-  filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.5));
+  filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.5));
 }
 
 .lessonTitle {
@@ -94,14 +94,14 @@
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   pointer-events: none;
-  background: radial-gradient(120% 120% at 50% -20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+  background: radial-gradient(120% 120% at 50% -20%, rgba(249, 115, 22, 0.05) 0%, transparent 50%);
 }
 
 .courseHeader {
   margin-bottom: 2rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid var(--border-glass);
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), transparent);
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.05), transparent);
   border-radius: 12px;
   padding: 2rem;
   animation: slideUpFade 0.7s ease-out;
@@ -168,13 +168,13 @@
 
 .videoItem:hover {
   transform: translateX(1px);
-  border-color: rgba(59, 130, 246, 0.35);
+  border-color: rgba(251, 146, 60, 0.35);
 }
 
 .videoItem.active {
   border-color: var(--primary);
-  box-shadow: 0 0 18px rgba(59, 130, 246, 0.18);
-  background: linear-gradient(180deg, rgba(59, 130, 246, 0.08), var(--bg-card));
+  box-shadow: 0 0 18px rgba(249, 115, 22, 0.18);
+  background: linear-gradient(180deg, rgba(249, 115, 22, 0.08), var(--bg-card));
 }
 
 .videoItemTitle {
@@ -282,7 +282,7 @@
 }
 
 .completedIcon {
-  color: #10b981;
+  color: #fb923c;
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -296,7 +296,7 @@
 .progressBarOuter {
   height: 12px;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.05));
+  background: linear-gradient(90deg, rgba(249, 115, 22, 0.1), rgba(251, 146, 60, 0.05));
   overflow: hidden;
   margin-top: 0.5rem;
   border: 1px solid var(--border-glass);
@@ -309,7 +309,7 @@
   background-size: 200% 100%;
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
   animation: shimmer-ultra 3s infinite;
 }
 
@@ -358,6 +358,46 @@
   justify-content: center;
   height: 100%;
   color: var(--text-secondary);
+}
+
+[data-theme='light'] .lessonBtn {
+  background: linear-gradient(135deg, var(--bg-card), rgba(255, 248, 240, 0.92));
+  border-color: rgba(215, 120, 34, 0.14);
+}
+
+[data-theme='light'] .lessonBtn:hover {
+  background: linear-gradient(135deg, var(--bg-hover), rgba(255, 138, 31, 0.06));
+}
+
+[data-theme='light'] .contentCard {
+  background: rgba(255, 251, 246, 0.9);
+  border-color: rgba(215, 120, 34, 0.12);
+  box-shadow: 0 30px 60px rgba(145, 97, 42, 0.12), inset 0 1px 0 rgba(255,255,255,0.7);
+}
+
+[data-theme='light'] .videoFrame {
+  border-color: rgba(215, 120, 34, 0.18);
+}
+
+[data-theme='light'] .videoItem {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(215, 120, 34, 0.12);
+}
+
+[data-theme='light'] .videoItem.active {
+  background: linear-gradient(180deg, rgba(255, 138, 31, 0.08), rgba(255, 255, 255, 0.9));
+}
+
+[data-theme='light'] .resourceSection,
+[data-theme='light'] .resourceItem,
+[data-theme='light'] .emptyState {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(215, 120, 34, 0.12);
+}
+
+[data-theme='light'] .progressBarOuter {
+  background: linear-gradient(90deg, rgba(255, 138, 31, 0.08), rgba(255, 208, 138, 0.05));
+  border-color: rgba(215, 120, 34, 0.14);
 }
 
 @media (max-width: 1024px) {

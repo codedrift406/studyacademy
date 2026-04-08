@@ -63,8 +63,8 @@ export const StudentRpgMap: React.FC<RpgMapProps> = memo(({ courses }) => {
             </radialGradient>
             {/* Dynamic Biome Gradients */}
             <radialGradient id="biome1" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#6366f1" stopOpacity="0.08" />
-              <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.08" />
+              <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
             </radialGradient>
           </defs>
           <rect width="100%" height="100%" fill="url(#grid)" />

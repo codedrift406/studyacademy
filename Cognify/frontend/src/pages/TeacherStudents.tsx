@@ -253,7 +253,7 @@ export const TeacherStudents = () => {
         </Card>
 
         {/* Card 3: Assistance & Snapshot (AI Support) */}
-        <Card className="glass-panel" style={{ background: 'rgba(99, 102, 241, 0.02)', height: '100%' }}>
+        <Card className="glass-panel" style={{ background: 'rgba(249, 115, 22, 0.02)', height: '100%' }}>
           <CardBody>
             <h3 style={{ fontSize: '0.85rem', marginBottom: '0.8rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <TrendingUp size={16} /> Course Snapshot
@@ -324,7 +324,7 @@ export const TeacherStudents = () => {
                         <td style={{ padding: '1.25rem 1.5rem' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
                             <div className={styles.riskAvatar} style={{ 
-                                background: row.risk ? 'linear-gradient(135deg, #f43f5e, #fb7185)' : 'linear-gradient(135deg, #6366f1, #a855f7)',
+                                background: row.risk ? 'linear-gradient(135deg, #f43f5e, #fb7185)' : 'linear-gradient(135deg, #f97316, #fb923c)',
                                 width: 34, height: 34, borderRadius: '10px', fontSize: '0.85rem'
                             }}>
                               {(row.student.name || 'S')[0].toUpperCase()}
@@ -340,8 +340,8 @@ export const TeacherStudents = () => {
                             padding: '0.25rem 0.6rem', 
                             borderRadius: '6px', 
                             display: 'inline-block',
-                            background: row.risk ? 'rgba(244, 63, 94, 0.12)' : 'rgba(16, 185, 129, 0.12)',
-                            color: row.risk ? '#f43f5e' : '#10b981',
+                            background: row.risk ? 'rgba(244, 63, 94, 0.12)' : 'rgba(251, 146, 60, 0.12)',
+                            color: row.risk ? '#f43f5e' : '#fb923c',
                             fontWeight: 800,
                             fontSize: '0.85rem'
                           }}>
@@ -392,7 +392,7 @@ export const TeacherStudents = () => {
                                       justifyContent: 'center',
                                       color: 'white',
                                       cursor: 'pointer',
-                                      boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)'
+                                      boxShadow: '0 4px 12px rgba(249, 115, 22, 0.3)'
                                     }}
                                   >
                                     <Save size={16} />

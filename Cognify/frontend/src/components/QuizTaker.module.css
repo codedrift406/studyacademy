@@ -24,7 +24,7 @@
 .takingContainer {
   background: var(--card-bg);
   border: 1px solid var(--primary);
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.1);
   padding: 1.5rem;
   border-radius: 16px;
   margin-top: 1.5rem;
@@ -96,7 +96,7 @@
 
 .answerOption.selected {
   border-color: var(--primary);
-  background: rgba(99, 102, 241, 0.1);
+  background: rgba(249, 115, 22, 0.1);
 }
 
 .footer {

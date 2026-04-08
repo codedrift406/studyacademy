@@ -92,7 +92,7 @@ export const AuthPage = () => {
           <CardBody>
             <div className={styles.header}>
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem', color: 'var(--primary)' }}>
-                <div style={{ padding: '0.75rem', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '1rem', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
+                <div style={{ padding: '0.75rem', background: 'rgba(249, 115, 22, 0.1)', borderRadius: '1rem', border: '1px solid rgba(251, 146, 60, 0.2)' }}>
                   <BookOpen size={32} />
                 </div>
               </div>

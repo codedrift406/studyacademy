@@ -1,15 +1,17 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Breadcrumbs } from '../Breadcrumbs';
 import { PageTransition } from '../PageTransition.tsx';
 import {
   BrainCircuit,
   BookOpen,
+  ChevronDown,
   LayoutDashboard,
   LogOut,
   Menu,
   Moon,
   PlusCircle,
+  Clock3,
   Sun,
   UserCircle2,
   Users,
@@ -33,6 +35,8 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const profileMenuRef = useRef<HTMLDivElement | null>(null);
   const { language, setLanguage, theme, toggleTheme, t } = usePreferences();
 
   const user = useMemo(() => {
@@ -41,6 +45,42 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
     } catch {
       return {};
     }
+  }, []);
+
+  const accountBasePath = location.pathname.startsWith('/admin')
+    ? '/admin'
+    : role === 'teacher'
+      ? '/teacher'
+      : '/student';
+
+  const profilePath = `${accountBasePath}/profile`;
+  const coursesPath = role === 'student' ? '/student/dashboard' : '/teacher/courses';
+  const historyPath = `${accountBasePath}/history`;
+
+  useEffect(() => {
+    setIsProfileMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const handlePointerDown = (event: MouseEvent) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target as Node)) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsProfileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -56,6 +96,11 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
     navigate('/auth');
+  };
+
+  const openPage = (path: string) => {
+    setIsProfileMenuOpen(false);
+    navigate(path);
   };
 
   const navLinks: NavLinkItem[] =
@@ -76,6 +121,8 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
         ];
 
   const currentTitle = navLinks.find((item) => location.pathname.startsWith(item.path))?.label || 'Dashboard';
+  const historyTitle = t('layout.history', 'Completed Courses History');
+  const resolvedTitle = currentTitle !== 'Dashboard' ? currentTitle : location.pathname.endsWith('/history') ? historyTitle : currentTitle;
   const initials = (user.nickname || user.name || (role === 'teacher' ? 'Teacher' : 'Student')).slice(0, 2).toUpperCase();
 
 
@@ -132,7 +179,7 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
               </button>
               <div className={styles.headerTitleArea}>
                 <div className={styles.titleRow}>
-                  <h2 className={styles.headerTitle}>{currentTitle}</h2>
+                  <h2 className={styles.headerTitle}>{resolvedTitle}</h2>
                 </div>
                 <Breadcrumbs />
               </div>
@@ -172,11 +219,45 @@ export const DashboardLayout = ({ children, role }: DashboardLayoutProps) => {
               >
                 {theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
               </button>
-              {user.avatarUrl ? (
-                <img src={user.avatarUrl} alt="avatar" className={styles.avatar} />
-              ) : (
-                <div className={styles.avatar}>{initials}</div>
-              )}
+              <div className={styles.profileMenu} ref={profileMenuRef}>
+                <button
+                  className={`${styles.profileButton} ${isProfileMenuOpen ? styles.profileButtonOpen : ''}`}
+                  type="button"
+                  onClick={() => setIsProfileMenuOpen((current) => !current)}
+                  aria-haspopup="menu"
+                  aria-expanded={isProfileMenuOpen}
+                  aria-label={t('layout.profileMenu', 'Profile menu')}
+                >
+                  {user.avatarUrl ? (
+                    <img src={user.avatarUrl} alt="" className={styles.avatar} />
+                  ) : (
+                    <div className={styles.avatar}>{initials}</div>
+                  )}
+                  <ChevronDown size={16} className={styles.profileChevron} />
+                </button>
+
+                {isProfileMenuOpen && (
+                  <div className={styles.profileDropdown} role="menu" aria-label={t('layout.profileMenu', 'Profile menu')}>
+                    <button type="button" className={styles.profileMenuItem} onClick={() => openPage(profilePath)} role="menuitem">
+                      <UserCircle2 size={18} />
+                      <span>{t('layout.profile', 'Profile')}</span>
+                    </button>
+                    <button type="button" className={styles.profileMenuItem} onClick={() => openPage(coursesPath)} role="menuitem">
+                      <BookOpen size={18} />
+                      <span>{t('layout.myCourses', 'My Courses')}</span>
+                    </button>
+                    <button type="button" className={styles.profileMenuItem} onClick={() => openPage(historyPath)} role="menuitem">
+                      <Clock3 size={18} />
+                      <span>{t('layout.history', 'Completed Courses History')}</span>
+                    </button>
+                    <div className={styles.profileDivider} />
+                    <button type="button" className={`${styles.profileMenuItem} ${styles.profileMenuItemDanger}`} onClick={handleLogout} role="menuitem">
+                      <LogOut size={18} />
+                      <span>{t('layout.logout', 'Logout')}</span>
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </header>
 

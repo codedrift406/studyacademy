@@ -133,7 +133,7 @@ const ResultsArea = React.memo(({ results, loading, copied, onCopy, t }: any) =>
                   className={styles.copyBtn} 
                   onClick={() => onCopy(results?.translated || results?.summary || '')}
                 >
-                  {copied ? <Check size={16} color="#10b981" /> : <Copy size={16} />}
+                  {copied ? <Check size={16} color="#fb923c" /> : <Copy size={16} />}
                   <span>{copied ? t('ai.library.copied') : t('ai.library.copy')}</span>
                 </button>
               </div>
@@ -426,4 +426,4 @@ const AILibraryPage: React.FC = () => {
   );
 };
 
-export { AILibraryPage };
+export { AILibraryPage };

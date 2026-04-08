@@ -12,7 +12,7 @@ const variantConfig = {
     label: 'Success',
     icon: CheckCircle2,
     tone: 'var(--success)',
-    background: 'rgba(16, 185, 129, 0.12)',
+    background: 'rgba(251, 146, 60, 0.12)',
   },
   error: {
     label: 'Error',
@@ -24,7 +24,7 @@ const variantConfig = {
     label: 'Info',
     icon: Info,
     tone: 'var(--primary)',
-    background: 'rgba(59, 130, 246, 0.12)',
+    background: 'rgba(249, 115, 22, 0.12)',
   },
   warning: {
     label: 'Warning',

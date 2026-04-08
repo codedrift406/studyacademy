@@ -177,7 +177,7 @@ export const StudentDashboard = () => {
                   <p style={{ color: 'var(--text-secondary)' }}>Complete modules and tests to earn your first badge!</p>
                 ) : (
                   gamification.badges.map((b: any) => (
-                    <div key={b.id} style={{ padding: '0.5rem 1rem', background: 'rgba(99, 102, 241, 0.1)', border: '1px solid var(--primary)', borderRadius: '20px', color: 'var(--primary)', fontWeight: 'bold' }}>
+                    <div key={b.id} style={{ padding: '0.5rem 1rem', background: 'rgba(249, 115, 22, 0.1)', border: '1px solid var(--primary)', borderRadius: '20px', color: 'var(--primary)', fontWeight: 'bold' }}>
                       🌟 {b.name}
                     </div>
                   ))
@@ -216,13 +216,13 @@ export const StudentDashboard = () => {
           <div style={{ display: 'flex', gap: '0.5rem', background: 'var(--bg-surface)', padding: '0.25rem', borderRadius: '12px', border: '1px solid var(--border-glass)' }}>
              <button 
                onClick={() => setViewMode('map')} 
-               style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', borderRadius: '8px', border: 'none', background: viewMode === 'map' ? 'rgba(99, 102, 241, 0.2)' : 'transparent', color: viewMode === 'map' ? 'var(--primary)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}
+               style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', borderRadius: '8px', border: 'none', background: viewMode === 'map' ? 'rgba(249, 115, 22, 0.2)' : 'transparent', color: viewMode === 'map' ? 'var(--primary)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}
              >
                <MapIcon size={16}/> RPG Map
              </button>
              <button 
                onClick={() => setViewMode('grid')} 
-               style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', borderRadius: '8px', border: 'none', background: viewMode === 'grid' ? 'rgba(99, 102, 241, 0.2)' : 'transparent', color: viewMode === 'grid' ? 'var(--primary)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}
+               style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', borderRadius: '8px', border: 'none', background: viewMode === 'grid' ? 'rgba(249, 115, 22, 0.2)' : 'transparent', color: viewMode === 'grid' ? 'var(--primary)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}
              >
                <LayoutGrid size={16}/> Grid List
              </button>

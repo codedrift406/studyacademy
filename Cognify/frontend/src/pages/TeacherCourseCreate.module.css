@@ -72,7 +72,7 @@
 .iconCircle {
   width: 44px;
   height: 44px;
-  background: rgba(139, 92, 246, 0.15);
+  background: rgba(249, 115, 22, 0.15);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -125,7 +125,7 @@
 
 .successCard {
   border: 1px solid var(--success);
-  background: rgba(16, 185, 129, 0.08);
+  background: rgba(251, 146, 60, 0.08);
 }
 
 .successContent {
@@ -181,7 +181,7 @@
   font-size: 0.75rem;
   font-weight: 700;
   color: var(--primary-hover);
-  background: rgba(139, 92, 246, 0.1);
+  background: rgba(249, 115, 22, 0.1);
   padding: 0.25rem 0.6rem;
   border-radius: 6px;
   text-transform: uppercase;
@@ -218,6 +218,40 @@
 
 .lessonInput:focus {
   border-color: var(--primary);
+}
+
+[data-theme='light'] .tabSwitcher {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(215, 120, 34, 0.14);
+}
+
+[data-theme='light'] .activeTab {
+  background: rgba(255, 248, 240, 0.96);
+  box-shadow: 0 6px 14px rgba(145, 97, 42, 0.12);
+}
+
+[data-theme='light'] .glowBox {
+  background: rgba(255, 251, 246, 0.88);
+  border-color: rgba(215, 120, 34, 0.12);
+}
+
+[data-theme='light'] .textarea {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(215, 120, 34, 0.14);
+}
+
+[data-theme='light'] .textarea:focus {
+  background: rgba(255, 250, 244, 0.98);
+}
+
+[data-theme='light'] .lessonEntry {
+  background: rgba(255, 255, 255, 0.84);
+  border-color: rgba(215, 120, 34, 0.12);
+}
+
+[data-theme='light'] .successCard {
+  background: rgba(255, 245, 235, 0.92);
+  border-color: rgba(251, 146, 60, 0.34);
 }
 
 .lessonTextarea {
@@ -263,13 +297,13 @@
 }
 
 .tag {
-  background: rgba(139, 92, 246, 0.1);
+  background: rgba(249, 115, 22, 0.1);
   color: var(--primary-hover);
   padding: 0.4rem 0.875rem;
   border-radius: 12px;
   font-size: 0.85rem;
   font-weight: 600;
-  border: 1px solid rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(251, 146, 60, 0.15);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
@@ -279,4 +313,3 @@
   color: white;
   transform: translateY(-2px);
 }
-
