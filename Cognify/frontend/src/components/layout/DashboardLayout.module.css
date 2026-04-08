@@ -141,8 +141,8 @@
   display: flex;
   position: relative;
   align-items: center;
-  gap: 1rem;
-  padding: 0.875rem 1.25rem;
+  gap: 1.1rem;
+  padding: 0.875rem 1.35rem;
   color: var(--text-secondary);
   text-decoration: none;
   border-radius: 12px;
@@ -181,6 +181,10 @@
 .navItemActive svg {
   filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.5));
   color: var(--primary-light);
+}
+
+.navItem svg {
+  flex-shrink: 0;
 }
 
 .mainSection {

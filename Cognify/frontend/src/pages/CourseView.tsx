@@ -7,27 +7,28 @@ import { VideoPlayer } from '../components/ui/VideoPlayer';
 import { QuizTaker } from '../components/QuizTaker';
 import { QuizCreator } from '../components/QuizCreator';
 import { authFetch } from '../lib/api';
+import { usePreferences } from '../context/PreferencesContext';
 import styles from './CourseView.module.css';
 
-const AITutorSection = memo(({ draft, onDraftChange, onAsk, loading, reply }: any) => {
+const AITutorSection = memo(({ draft, onDraftChange, onAsk, loading, reply, t }: any) => {
   return (
     <div style={{ marginTop: '1rem', borderTop: '1px solid var(--border-glass)', paddingTop: '1rem' }}>
-      <h3 style={{ marginBottom: '0.65rem' }}>AI Tutor</h3>
+      <h3 style={{ marginBottom: '0.65rem' }}>{t('course.view.aiTutor', 'AI Tutor')}</h3>
       <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
         <Button size="sm" variant="secondary" onClick={() => onAsk('simplify')} disabled={loading}>
-          Explain simpler
+          {t('course.view.explainSimpler', 'Explain simpler')}
         </Button>
         <Button size="sm" variant="secondary" onClick={() => onAsk('example')} disabled={loading}>
-          Give example
+          {t('course.view.giveExample', 'Give example')}
         </Button>
         <Button size="sm" variant="secondary" onClick={() => onAsk('check_answer')} disabled={loading}>
-          Check my answer
+          {t('course.view.checkAnswer', 'Check my answer')}
         </Button>
       </div>
       <textarea
         value={draft}
         onChange={(e) => onDraftChange(e.target.value)}
-        placeholder="Write your answer draft for AI feedback..."
+        placeholder={t('course.view.draftPlaceholder', 'Write your answer draft for AI feedback...')}
         style={{
           width: '100%',
           minHeight: 88,
@@ -44,12 +45,12 @@ const AITutorSection = memo(({ draft, onDraftChange, onAsk, loading, reply }: an
   );
 });
 
-const CourseChat = memo(({ messages, text, tokenRole, onTextChange, onSend, onPin, onHide }: any) => {
+const CourseChat = memo(({ messages, text, tokenRole, onTextChange, onSend, onPin, onHide, t }: any) => {
   const isPrivileged = tokenRole?.toUpperCase() === 'TEACHER' || tokenRole?.toUpperCase() === 'ADMIN';
   
   return (
     <div style={{ marginTop: '1.5rem', borderTop: '1px solid var(--border-glass)', paddingTop: '1rem' }}>
-      <h3 style={{ marginBottom: '0.65rem' }}>Course Chat</h3>
+      <h3 style={{ marginBottom: '0.65rem' }}>{t('course.view.courseChat', 'Course Chat')}</h3>
       <div style={{ display: 'grid', gap: '0.5rem', maxHeight: 220, overflow: 'auto', marginBottom: '0.7rem' }}>
         {messages.map((message: any) => (
           <div
@@ -62,16 +63,16 @@ const CourseChat = memo(({ messages, text, tokenRole, onTextChange, onSend, onPi
             }}
           >
             <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-              {message.user?.nickname || message.user?.name || 'User'}{message.pinned ? ' - pinned' : ''}
+              {message.user?.nickname || message.user?.name || t('course.view.user', 'User')}{message.pinned ? ` - ${t('course.view.pinned', 'pinned')}` : ''}
             </div>
             <div>{message.content}</div>
             {isPrivileged && (
               <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.4rem' }}>
                 <Button size="sm" variant="secondary" onClick={() => onPin(message.id)}>
-                  {message.pinned ? 'Unpin' : 'Pin'}
+                  {message.pinned ? t('course.view.unpin', 'Unpin') : t('course.view.pin', 'Pin')}
                 </Button>
                 <Button size="sm" variant="secondary" onClick={() => onHide(message.id)}>
-                  Hide
+                  {t('course.view.hide', 'Hide')}
                 </Button>
               </div>
             )}
@@ -82,7 +83,7 @@ const CourseChat = memo(({ messages, text, tokenRole, onTextChange, onSend, onPi
         <input
           value={text}
           onChange={(e) => onTextChange(e.target.value)}
-          placeholder="Ask a question about this course..."
+          placeholder={t('course.view.askQuestionPlaceholder', 'Ask a question about this course...')}
           style={{
             flex: 1,
             background: 'var(--bg-surface)',
@@ -93,7 +94,7 @@ const CourseChat = memo(({ messages, text, tokenRole, onTextChange, onSend, onPi
           }}
         />
         <Button onClick={onSend} size="sm">
-          Send
+          {t('course.view.send', 'Send')}
         </Button>
       </div>
     </div>
@@ -177,6 +178,7 @@ interface AssessmentPack {
 
 export const CourseView = () => {
   const { id } = useParams();
+  const { t } = usePreferences();
   const navigate = useNavigate();
 
   const [course, setCourse] = useState<Course | null>(null);
@@ -273,12 +275,12 @@ export const CourseView = () => {
       const options = [lesson.title, ...distractors].sort(() => Math.random() - 0.5);
       return {
         id: lesson.id,
-        prompt: `Which module belongs to course "${course.title}"?`,
+        prompt: t('course.view.quizPrompt', 'Which module belongs to course "{courseTitle}"?', { courseTitle: course.title }),
         options,
         answer: lesson.title,
       };
     });
-  }, [course]);
+  }, [course, t]);
 
   useEffect(() => {
     if (progressRef.current) {
@@ -689,7 +691,7 @@ export const CourseView = () => {
       {!focusMode && (
         <div className={styles.sidebar}>
           <div className={styles.lessonSummary}>
-            <Button variant="secondary" onClick={() => navigate(-1)} icon={<ArrowLeft size={16} />}>
+            <Button size="sm" variant="secondary" className={styles.backButton} onClick={() => navigate(-1)} icon={<ArrowLeft size={16} />}>
               Back
             </Button>
           </div>
@@ -962,6 +964,7 @@ export const CourseView = () => {
                   onAsk={askTutor}
                   loading={tutorLoading}
                   reply={tutorReply}
+                  t={t}
                 />
               </div>
             ) : (
@@ -1074,6 +1077,7 @@ export const CourseView = () => {
             onSend={sendChat}
             onPin={togglePinMessage}
             onHide={hideMessage}
+            t={t}
           />
         </div>
       </div>

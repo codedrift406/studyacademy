@@ -20,6 +20,14 @@ interface NewLesson {
   content: string;
 }
 
+interface GeneratedBlueprint {
+  criteria: string[];
+  suggestedVideos: Array<{
+    title: string;
+    url: string;
+  }>;
+}
+
 export const TeacherCourseCreate = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -53,6 +61,7 @@ export const TeacherCourseCreate = () => {
   // Success state
   const [isDone, setIsDone] = useState(false);
   const [generatedCourseId, setGeneratedCourseId] = useState<string | null>(null);
+  const [generatedBlueprint, setGeneratedBlueprint] = useState<GeneratedBlueprint | null>(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -126,6 +135,7 @@ export const TeacherCourseCreate = () => {
       if (data.course && data.course.id) {
         setGeneratedCourseId(data.course.id);
       }
+      setGeneratedBlueprint(data.blueprint || null);
       showToast({ description: 'Course structure generated successfully.', variant: 'success' });
       setIsDone(true);
     } catch (err) {
@@ -172,6 +182,7 @@ export const TeacherCourseCreate = () => {
       if (data.course && data.course.id) {
         setGeneratedCourseId(data.course.id);
       }
+      setGeneratedBlueprint(null);
       showToast({ description: isEditMode ? 'Course updated successfully.' : 'Course created successfully.', variant: 'success' });
       setIsDone(true);
     } catch (err) {
@@ -213,10 +224,34 @@ export const TeacherCourseCreate = () => {
               <Button onClick={() => generatedCourseId ? navigate(`/course/${generatedCourseId}`) : navigate('/teacher/dashboard')}>
                 View Course
               </Button>
-              <Button variant="secondary" onClick={() => { setIsDone(false); setTopic(''); setManualTitle(''); setManualLessons([{ title: '', content: '' }]); }}>
+              <Button variant="secondary" onClick={() => { setIsDone(false); setTopic(''); setManualTitle(''); setManualLessons([{ title: '', content: '' }]); setGeneratedBlueprint(null); setGeneratedCourseId(null); }}>
                 Create Another
               </Button>
             </div>
+            {generatedBlueprint && (
+              <div style={{ width: '100%', marginTop: '1rem', textAlign: 'left', display: 'grid', gap: '0.85rem' }}>
+                <div style={{ padding: '0.85rem 1rem', borderRadius: 14, border: '1px solid var(--border-glass)', background: 'color-mix(in srgb, var(--bg-surface) 82%, transparent)' }}>
+                  <strong style={{ display: 'block', marginBottom: '0.45rem' }}>AI criteria used</strong>
+                  <ul style={{ margin: 0, paddingLeft: '1.1rem', color: 'var(--text-secondary)' }}>
+                    {generatedBlueprint.criteria.slice(0, 5).map((criterion) => (
+                      <li key={criterion} style={{ marginBottom: '0.35rem' }}>{criterion}</li>
+                    ))}
+                  </ul>
+                </div>
+                {generatedBlueprint.suggestedVideos.length > 0 && (
+                  <div style={{ padding: '0.85rem 1rem', borderRadius: 14, border: '1px solid var(--border-glass)', background: 'color-mix(in srgb, var(--bg-surface) 82%, transparent)' }}>
+                    <strong style={{ display: 'block', marginBottom: '0.45rem' }}>Attached videos</strong>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                      {generatedBlueprint.suggestedVideos.map((video) => (
+                        <span key={video.url} style={{ padding: '0.35rem 0.65rem', borderRadius: 999, border: '1px solid var(--border-glass)', color: 'var(--text-secondary)' }}>
+                          {video.title}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </CardBody>
         </Card>
       </div>
@@ -484,4 +519,3 @@ export const TeacherCourseCreate = () => {
     </div>
   );
 };
-

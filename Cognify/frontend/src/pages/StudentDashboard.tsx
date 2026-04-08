@@ -170,11 +170,11 @@ export const StudentDashboard = () => {
         <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
           <Card>
             <CardBody>
-              <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Trophy className="text-primary" /> Your Badges & Stats</h3>
+              <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Trophy className="text-primary" /> {t('badges.title', 'Your Badges & Stats')}</h3>
               <p style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>{t('common.level', 'Level {level}', { level: gamification.level })}</p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '1rem', flexWrap: 'wrap' }}>
                 {gamification.badges.length === 0 ? (
-                  <p style={{ color: 'var(--text-secondary)' }}>Complete modules and tests to earn your first badge!</p>
+                  <p style={{ color: 'var(--text-secondary)' }}>{t('badges.noBadges', 'Complete modules and tests to earn your first badge!')}</p>
                 ) : (
                   gamification.badges.map((b: any) => (
                     <div key={b.id} style={{ padding: '0.5rem 1rem', background: 'rgba(249, 115, 22, 0.1)', border: '1px solid var(--primary)', borderRadius: '20px', color: 'var(--primary)', fontWeight: 'bold' }}>
@@ -188,7 +188,7 @@ export const StudentDashboard = () => {
 
           <Card>
             <CardBody>
-              <h3 style={{ marginBottom: '1rem' }}>Global Leaderboard (Top XP)</h3>
+              <h3 style={{ marginBottom: '1rem' }}>{t('leaderboard.title', 'Global Leaderboard (Top XP)')}</h3>
               <div style={{ display: 'grid', gap: '0.5rem' }}>
                 {leaderboard.map((lbUser, idx) => (
                   <div key={lbUser.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem', background: lbUser.id === user.id ? 'var(--bg-surface)' : 'transparent', borderRadius: 8 }}>
@@ -196,7 +196,7 @@ export const StudentDashboard = () => {
                       <strong style={{ color: idx === 0 ? '#fbbf24' : idx === 1 ? '#9ca3af' : idx === 2 ? '#b45309' : 'var(--text-primary)' }}>
                         #{idx + 1}
                       </strong>
-                      <span>{lbUser.name || 'Student'}</span>
+                      <span>{lbUser.name || t('leaderboard.placeholder', 'Student')}</span>
                     </div>
                     <span style={{ fontWeight: 'bold', color: 'var(--primary)' }}>{lbUser.xp} XP</span>
                   </div>
@@ -218,19 +218,19 @@ export const StudentDashboard = () => {
                onClick={() => setViewMode('map')} 
                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', borderRadius: '8px', border: 'none', background: viewMode === 'map' ? 'rgba(249, 115, 22, 0.2)' : 'transparent', color: viewMode === 'map' ? 'var(--primary)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}
              >
-               <MapIcon size={16}/> RPG Map
+               <MapIcon size={16}/> {t('student.dashboard.viewMode.map', 'RPG Map')}
              </button>
              <button 
                onClick={() => setViewMode('grid')} 
                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', borderRadius: '8px', border: 'none', background: viewMode === 'grid' ? 'rgba(249, 115, 22, 0.2)' : 'transparent', color: viewMode === 'grid' ? 'var(--primary)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}
              >
-               <LayoutGrid size={16}/> Grid List
+               <LayoutGrid size={16}/> {t('student.dashboard.viewMode.grid', 'Grid List')}
              </button>
           </div>
         </div>
 
         {isLoading ? (
-          <div className={styles.loadingState}>Loading your dashboard...</div>
+          <div className={styles.loadingState}>{t('student.dashboard.loadingDashboard', 'Loading your dashboard...')}</div>
         ) : courses.length === 0 ? (
           <div className={styles.emptyState}>{t('student.dashboard.noCourses', 'You are not enrolled in any courses right now.')}</div>
         ) : viewMode === 'map' ? (

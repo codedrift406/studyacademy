@@ -20,7 +20,7 @@ import { usePreferences } from '../context/PreferencesContext';
 import { authFetch } from '../lib/api';
 import styles from './AILibraryPage.module.css';
 
-const SearchHub = React.memo(({ query, mode, loading, error, onQueryChange, onModeChange, onSearch, onKeyPress, t }: any) => {
+const SearchHub = React.memo(({ query, mode, loading, error, disabled, onQueryChange, onModeChange, onSearch, onKeyPress, t }: any) => {
   return (
     <section className={styles.heroSection}>
       <motion.div 
@@ -53,6 +53,7 @@ const SearchHub = React.memo(({ query, mode, loading, error, onQueryChange, onMo
             <textarea
               className={styles.commandInput}
               value={query}
+              disabled={disabled}
               onChange={(e) => onQueryChange(e.target.value)}
               onKeyPress={onKeyPress}
               placeholder={mode === 'search' ? "Чего желаете исследовать сегодня?" : "Введите текст для обработки..."}
@@ -61,7 +62,7 @@ const SearchHub = React.memo(({ query, mode, loading, error, onQueryChange, onMo
             <button 
               className={styles.executeBtn}
               onClick={onSearch}
-              disabled={loading || !query.trim()}
+              disabled={disabled || loading || !query.trim()}
             >
               {loading ? <Sparkles className={styles.spinning} size={20} /> : <ArrowRight size={20} />}
             </button>
@@ -78,6 +79,7 @@ const SearchHub = React.memo(({ query, mode, loading, error, onQueryChange, onMo
                 key={chip.id}
                 className={`${styles.modeChip} ${mode === chip.id ? styles.chipActive : ''}`}
                 onClick={() => onModeChange(chip.id as any)}
+                disabled={disabled}
               >
                 {chip.icon} {chip.label}
               </button>
@@ -223,6 +225,7 @@ interface LibraryResponse {
 
 const AILibraryPage: React.FC = () => {
   const { t } = usePreferences();
+  const isUnderConstruction = true;
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState<'search' | 'translate' | 'summarize' | 'web_search'>('search');
   const [targetLanguage, setTargetLanguage] = useState('ru');
@@ -323,103 +326,107 @@ const AILibraryPage: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const visibleError = isUnderConstruction ? '' : error;
+
   useEffect(() => {
-    if (mode === 'search') {
-      handleSearch();
-    }
+    // Keep the section intentional while the feature is under construction.
   }, []);
 
   return (
     <div className={styles.page}>
       <div className={styles.kzPattern} />
-      
-      {/* Search Hub / Command Center */}
-      <SearchHub 
+      <section className={styles.underConstructionHero}>
+        <div className={styles.underConstructionCard}>
+          <div className={styles.underConstructionGlow} />
+          <div className={styles.underConstructionPill}>В разработке</div>
+          <h2>Данный раздел находиться в разработке</h2>
+          <p>Приносим наши извинения, скоро всё заработает.</p>
+        </div>
+      </section>
+
+      <div className={styles.lockedShell} aria-hidden={isUnderConstruction}>
+        <SearchHub 
         query={query}
         mode={mode}
         loading={loading}
-        error={error}
-        onQueryChange={setQuery}
-        onModeChange={setMode}
-        onSearch={handleSearch}
-        onKeyPress={handleKeyPress}
-        t={t}
-      />
+        error={visibleError}
+        disabled={isUnderConstruction}
+          onQueryChange={setQuery}
+          onModeChange={setMode}
+          onSearch={handleSearch}
+          onKeyPress={handleKeyPress}
+          t={t}
+        />
 
-      <div className={styles.container}>
-        <div className={styles.mainLayout}>
-          {/* Action Sidebar (Hidden on search, visible on translation/upload) */}
-          <AnimatePresence>
-            {(mode === 'translate' || mode === 'summarize' || file) && (
-              <motion.aside 
-                className={styles.sidebar}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-              >
-                <div className={`glass-panel ${styles.sideCard}`}>
-                  <h4>{t('ai.library.mode')}</h4>
-                  
-                  <div className={styles.fileUploadArea}>
-                    <label className={styles.fileLabel}>
-                      <input 
-                        type="file" 
-                        style={{ display: 'none' }} 
-                        onChange={(e) => setFile(e.target.files?.[0] || null)}
-                      />
-                      <div className={`${styles.uploadBox} ${file ? styles.uploadBoxActive : ''}`}>
-                        {file ? (
-                          <div className={styles.fileInfo}>
-                            <FileUp size={20} className="text-primary" />
-                            <div className={styles.fileName}>{file.name}</div>
-                            <button onClick={(e) => { e.preventDefault(); setFile(null); }} className={styles.removeFile}>
-                              <X size={14} />
-                            </button>
-                          </div>
-                        ) : (
-                          <>
-                            <Upload size={20} />
-                            <span>{t('course.create.upload')}</span>
-                          </>
-                        )}
-                      </div>
-                    </label>
-                  </div>
-
-                  {(mode === 'translate' || mode === 'summarize') && (
-                    <div className={styles.sideGroup}>
-                      <label>{t('ai.library.targetLang')}</label>
-                      <select
-                        className="glass-input"
-                        value={targetLanguage}
-                        onChange={(e) => setTargetLanguage(e.target.value)}
-                        style={{ padding: '0.5rem' }}
-                      >
-                        <option value="en">English (EN)</option>
-                        <option value="ru">Russian (RU)</option>
-                        <option value="kk">Kazakh (KK)</option>
-                      </select>
+        <div className={styles.container}>
+          <div className={styles.mainLayout}>
+            <AnimatePresence>
+              {(mode === 'translate' || mode === 'summarize' || file) && (
+                <motion.aside 
+                  className={styles.sidebar}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                >
+                  <div className={`glass-panel ${styles.sideCard}`}>
+                    <h4>{t('ai.library.mode')}</h4>
+                    
+                    <div className={styles.fileUploadArea}>
+                      <label className={styles.fileLabel}>
+                        <input 
+                          type="file" 
+                          disabled={isUnderConstruction}
+                          style={{ display: 'none' }} 
+                          onChange={(e) => setFile(e.target.files?.[0] || null)}
+                        />
+                        <div className={`${styles.uploadBox} ${file ? styles.uploadBoxActive : ''}`}>
+                          {file ? (
+                            <div className={styles.fileInfo}>
+                              <FileUp size={20} className="text-primary" />
+                              <div className={styles.fileName}>{file.name}</div>
+                              <button disabled={isUnderConstruction} onClick={(e) => { e.preventDefault(); setFile(null); }} className={styles.removeFile}>
+                                <X size={14} />
+                              </button>
+                            </div>
+                          ) : (
+                            <>
+                              <Upload size={20} />
+                              <span>{t('course.create.upload')}</span>
+                            </>
+                          )}
+                        </div>
+                      </label>
                     </div>
-                  )}
-                </div>
-              </motion.aside>
-            )}
-          </AnimatePresence>
 
-        <div className={styles.resultsArea}>
-          {results?.message && (
-            <div className={`${styles.message} ${styles.success}`}>
-              {results.message}
-            </div>
-          )}
-        </div>
-          <ResultsArea 
-            results={results}
-            loading={loading}
-            copied={copied}
-            onCopy={copyToClipboard}
-            t={t}
-          />
+                    {(mode === 'translate' || mode === 'summarize') && (
+                      <div className={styles.sideGroup}>
+                        <label>{t('ai.library.targetLang')}</label>
+                        <select
+                          className="glass-input"
+                          value={targetLanguage}
+                          disabled={isUnderConstruction}
+                          onChange={(e) => setTargetLanguage(e.target.value)}
+                          style={{ padding: '0.5rem' }}
+                        >
+                          <option value="en">English (EN)</option>
+                          <option value="ru">Russian (RU)</option>
+                          <option value="kk">Kazakh (KK)</option>
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                </motion.aside>
+              )}
+            </AnimatePresence>
+
+            <ResultsArea 
+              results={results}
+              loading={loading}
+              copied={copied}
+              onCopy={copyToClipboard}
+              t={t}
+            />
+          </div>
         </div>
       </div>
     </div>

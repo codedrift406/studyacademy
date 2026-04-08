@@ -1,4 +1,6 @@
 import { Router, Response } from 'express';
+import fs from 'fs';
+import path from 'path';
 import prisma from '../lib/prisma';
 import { AuthRequest, authMiddleware } from '../middleware/auth';
 import { sendTeacherIntegrationEvent } from './integrations';
@@ -21,6 +23,236 @@ function parseWeakLessons(value: string | null | undefined): string[] {
     } catch {
         return [];
     }
+}
+
+const CERTIFICATE_COLORS = {
+    blue: '#1f8bd6',
+    blueSoft: '#dcecf9',
+    blueDeep: '#274c77',
+    navy: '#234060',
+    gray: '#667085',
+    graySoft: '#97a3b3',
+    border: '#e7edf4',
+    badgeBorder: '#c7ddf4',
+    badgeFill: '#f6fbff',
+};
+
+const CERTIFICATE_FONTS = {
+    regular: resolveCertificateFont([
+        'C:\\Windows\\Fonts\\arial.ttf',
+        'C:\\Windows\\Fonts\\segoeui.ttf',
+        '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
+        '/Library/Fonts/Arial.ttf',
+    ]),
+    bold: resolveCertificateFont([
+        'C:\\Windows\\Fonts\\arialbd.ttf',
+        'C:\\Windows\\Fonts\\segoeuib.ttf',
+        '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',
+        '/Library/Fonts/Arial Bold.ttf',
+    ]),
+    italic: resolveCertificateFont([
+        'C:\\Windows\\Fonts\\ariali.ttf',
+        'C:\\Windows\\Fonts\\segoeuii.ttf',
+        '/usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf',
+        '/Library/Fonts/Arial Italic.ttf',
+    ]),
+    boldItalic: resolveCertificateFont([
+        'C:\\Windows\\Fonts\\arialbi.ttf',
+        'C:\\Windows\\Fonts\\segoeuiz.ttf',
+        '/usr/share/fonts/truetype/dejavu/DejaVuSans-BoldOblique.ttf',
+        '/Library/Fonts/Arial Bold Italic.ttf',
+    ]),
+};
+
+function resolveCertificateFont(candidates: string[]): string | null {
+    for (const candidate of candidates) {
+        if (fs.existsSync(candidate)) {
+            return candidate;
+        }
+    }
+    return null;
+}
+
+function registerCertificateFonts(doc: InstanceType<typeof PDFDocument>) {
+    if (CERTIFICATE_FONTS.regular) {
+        doc.registerFont('CertificateRegular', CERTIFICATE_FONTS.regular);
+    }
+    if (CERTIFICATE_FONTS.bold) {
+        doc.registerFont('CertificateBold', CERTIFICATE_FONTS.bold);
+    }
+    if (CERTIFICATE_FONTS.italic) {
+        doc.registerFont('CertificateItalic', CERTIFICATE_FONTS.italic);
+    }
+    if (CERTIFICATE_FONTS.boldItalic) {
+        doc.registerFont('CertificateBoldItalic', CERTIFICATE_FONTS.boldItalic);
+    }
+}
+
+function certificateFont(weight: 'regular' | 'bold' | 'italic' | 'boldItalic'): string {
+    switch (weight) {
+        case 'bold':
+            return CERTIFICATE_FONTS.bold ? 'CertificateBold' : 'Helvetica-Bold';
+        case 'italic':
+            return CERTIFICATE_FONTS.italic ? 'CertificateItalic' : 'Helvetica-Oblique';
+        case 'boldItalic':
+            return CERTIFICATE_FONTS.boldItalic ? 'CertificateBoldItalic' : 'Helvetica-BoldOblique';
+        default:
+            return CERTIFICATE_FONTS.regular ? 'CertificateRegular' : 'Helvetica';
+    }
+}
+
+function stripText(value: string | null | undefined): string {
+    return String(value || '').replace(/\s+/g, ' ').trim();
+}
+
+function titleCaseCourseTitle(title: string): string {
+    return stripText(title).replace(/\s+/g, ' ');
+}
+
+function deriveProficiencyLine(courseTitle: string, courseDescription: string | null): string {
+    const description = stripText(courseDescription);
+    if (description) {
+        return description.endsWith('.') ? description : `${description}.`;
+    }
+    const fallback = courseTitle ? `the core concepts and practical skills covered in ${courseTitle}` : 'the course curriculum';
+    return `the core concepts and practical skills covered in ${fallback}.`;
+}
+
+function getCertificateTopics(course: { lessons: Array<{ title: string }> }, courseTitle: string): string[] {
+    const topics = course.lessons
+        .map((lesson) => stripText(lesson.title))
+        .filter(Boolean)
+        .slice(0, 5);
+
+    if (topics.length > 0) {
+        return topics;
+    }
+
+    return [courseTitle || 'Course curriculum'];
+}
+
+function drawCertificateBackdrop(doc: InstanceType<typeof PDFDocument>) {
+    const pageWidth = 595.28;
+    const pageHeight = 841.89;
+
+    doc.save();
+    doc.rect(0, 0, pageWidth, pageHeight).fill('#ffffff');
+    doc.restore();
+
+    doc.save();
+    doc.lineWidth(1.2).strokeColor(CERTIFICATE_COLORS.border);
+    doc.rect(14, 14, pageWidth - 28, pageHeight - 28).stroke();
+    doc.restore();
+
+    doc.save();
+    doc.strokeColor(CERTIFICATE_COLORS.blueSoft);
+    doc.lineWidth(0.8);
+    for (let i = 0; i < 18; i += 1) {
+        const y = 38 + i * 13;
+        doc.moveTo(260, y);
+        doc.bezierCurveTo(330, y - 36, 470, y + 34, pageWidth - 10, y - 4);
+        doc.stroke();
+    }
+    doc.restore();
+
+    doc.save();
+    doc.fillColor('#f9fcff').opacity(0.7);
+    doc.circle(535, 90, 96).fill();
+    doc.restore();
+
+    doc.save();
+    doc.fillColor('#f3f8fd').opacity(0.95);
+    doc.circle(548, 110, 74).fill();
+    doc.restore();
+
+    doc.save();
+    doc.strokeColor('#eef4fa').lineWidth(1);
+    doc.circle(95, 178, 118).stroke();
+    doc.restore();
+}
+
+function drawBrandMark(doc: InstanceType<typeof PDFDocument>, x: number, y: number) {
+    doc.save();
+    doc.circle(x, y, 19).fill(CERTIFICATE_COLORS.blue);
+    doc.font(certificateFont('bold')).fontSize(24).fillColor('#ffffff');
+    doc.text('C', x - 8, y - 14, { width: 16, align: 'center' });
+    doc.restore();
+}
+
+function drawCertificateHeader(doc: InstanceType<typeof PDFDocument>, courseTitle: string, recipient: string, proficiency: string) {
+    const left = 44;
+
+    drawBrandMark(doc, 84, 86);
+
+    doc.font(certificateFont('bold')).fontSize(28).fillColor(CERTIFICATE_COLORS.blueDeep);
+    doc.text('Cognify', 118, 63);
+    doc.font(certificateFont('regular')).fontSize(16).fillColor(CERTIFICATE_COLORS.blue);
+    doc.text('Academy', 119, 95);
+
+    doc.font(certificateFont('bold')).fontSize(34).fillColor(CERTIFICATE_COLORS.navy);
+    doc.text('Certificate of Completion', left, 165, { width: 510, align: 'left' });
+
+    doc.font(certificateFont('italic')).fontSize(31).fillColor(CERTIFICATE_COLORS.blue);
+    doc.text(recipient || 'Learner', left, 255, { width: 510, align: 'left' });
+
+    doc.font(certificateFont('regular')).fontSize(17).fillColor('#4b5563');
+    doc.text(
+        `has successfully completed the ${courseTitle}`,
+        left,
+        315,
+        { width: 515, align: 'left' }
+    );
+
+    doc.font(certificateFont('regular')).fontSize(15).fillColor('#5b6470');
+    doc.text(
+        `and demonstrated proficiency in ${proficiency}`,
+        left,
+        348,
+        { width: 515, align: 'left' }
+    );
+}
+
+function drawLessonList(doc: InstanceType<typeof PDFDocument>, topics: string[]) {
+    const left = 58;
+    const startY = 410;
+    doc.font(certificateFont('regular')).fontSize(11.5).fillColor('#5a6675');
+
+    topics.forEach((topic, index) => {
+        const y = startY + index * 27;
+        doc.save();
+        doc.circle(left, y + 5, 2.6).fill(CERTIFICATE_COLORS.blue);
+        doc.restore();
+        doc.text(topic, left + 13, y, { width: 470, align: 'left' });
+    });
+}
+
+function drawCertificateFooter(doc: InstanceType<typeof PDFDocument>, code: string, issuedAt: Date) {
+    const badgeX = 58;
+    const badgeY = 703;
+
+    doc.save();
+    doc.roundedRect(badgeX, badgeY, 104, 36, 8).lineWidth(1).fillAndStroke(CERTIFICATE_COLORS.badgeFill, CERTIFICATE_COLORS.badgeBorder);
+    doc.restore();
+
+    doc.font(certificateFont('bold')).fontSize(14).fillColor('#4f7fb0');
+    doc.text('Verified', badgeX, badgeY + 10, { width: 104, align: 'center' });
+
+    doc.font(certificateFont('regular')).fontSize(9.5).fillColor(CERTIFICATE_COLORS.graySoft);
+    doc.text(`Certificate code: ${code}`, 58, 756, { width: 300, align: 'left' });
+    doc.text(`Issued: ${issuedAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, 58, 771, {
+        width: 300,
+        align: 'left',
+    });
+
+    doc.save();
+    doc.strokeColor('#c3ccd7').lineWidth(1);
+    doc.moveTo(383, 738).lineTo(549, 738).stroke();
+    doc.restore();
+
+    doc.font(certificateFont('italic')).fontSize(21).fillColor('#6b7280');
+    doc.text('Cognify Academy', 390, 700, { width: 160, align: 'center' });
+    doc.font(certificateFont('regular')).fontSize(10.5).fillColor('#8b94a1');
+    doc.text('Director, Cognify', 390, 742, { width: 160, align: 'center' });
 }
 
 router.post('/submit', authMiddleware, async (req: AuthRequest, res: Response) => {
@@ -319,7 +551,7 @@ router.get('/certificate/:code/pdf', async (req, res: Response) => {
             where: { certificateCode: code },
             include: {
                 student: { select: { name: true, email: true } },
-                course: { select: { title: true } },
+                course: { select: { title: true, description: true } },
             },
         });
         if (!item || !item.certificateIssued) {
@@ -332,6 +564,9 @@ router.get('/certificate/:code/pdf', async (req, res: Response) => {
 
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', `inline; filename="cognify-certificate-${code}.pdf"`);
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
 
         const doc = new PDFDocument({ size: 'A4', margin: 50 });
         doc.pipe(res);
@@ -343,7 +578,8 @@ router.get('/certificate/:code/pdf', async (req, res: Response) => {
         doc.moveDown(1.5);
         doc.fontSize(24).fillColor('#111827').text(item.student.name || item.student.email, { align: 'center' });
         doc.moveDown();
-        doc.fontSize(18).fillColor('#1f2937').text(item.course.title, { align: 'center' });
+        doc.moveDown(0.8);
+        doc.fontSize(18).fillColor('#1f2937').text(item.course.description || item.course.title, { align: 'center' });
         doc.moveDown(1.2);
         doc.fontSize(12).fillColor('#475569').text(`Certificate Code: ${code}`, { align: 'center' });
         doc.fontSize(12).fillColor('#475569').text(`Issued At: ${item.updatedAt.toISOString()}`, { align: 'center' });
@@ -352,6 +588,7 @@ router.get('/certificate/:code/pdf', async (req, res: Response) => {
         doc.moveDown(7);
         doc.fontSize(10).fillColor('#64748b').text('Scan QR to verify authenticity', { align: 'center' });
         doc.fontSize(9).fillColor('#94a3b8').text(verifyUrl, { align: 'center' });
+
         doc.end();
     } catch (error) {
         console.error('Certificate PDF error:', error);

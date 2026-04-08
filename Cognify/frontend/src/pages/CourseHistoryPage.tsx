@@ -35,7 +35,7 @@ interface TeacherCourseHistoryItem {
 
 export const CourseHistoryPage = () => {
   const navigate = useNavigate();
-  const { language } = usePreferences();
+  const { t, language } = usePreferences();
   const [user, setUser] = useState<StoredUser | null>(null);
   const [studentCourses, setStudentCourses] = useState<StudentCourseHistoryItem[]>([]);
   const [teacherCourses, setTeacherCourses] = useState<TeacherCourseHistoryItem[]>([]);
@@ -134,15 +134,15 @@ export const CourseHistoryPage = () => {
             <div className={styles.heroIntro}>
               <div className={styles.heroBadge}>
                 <Sparkles size={16} />
-                <span>{isStudent ? 'Learning archive' : 'Teaching archive'}</span>
+                <span>{isStudent ? t('course.history.learningArchive', 'Learning archive') : t('course.history.teachingArchive', 'Teaching archive')}</span>
               </div>
               <h1 className={styles.heroTitle}>
-                {isStudent ? 'Completed Courses History' : 'Course History'}
+                {isStudent ? t('course.history.completedCoursesTitle', 'Completed Courses History') : t('course.history.courseHistoryTitle', 'Course History')}
               </h1>
               <p className={styles.heroText}>
                 {isStudent
-                  ? 'Track the courses you have finished, revisit your scores, and jump back into the next learning path.'
-                  : 'Review the courses you created, their lesson counts, and how your teaching portfolio is growing.'}
+                  ? t('course.history.studentDesc', 'Track the courses you have finished, revisit your scores, and jump back into the next learning path.')
+                  : t('course.history.teacherDesc', 'Review the courses you created, their lesson counts, and how your teaching portfolio is growing.')}
               </p>
             </div>
 

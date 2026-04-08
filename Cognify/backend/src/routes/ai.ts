@@ -108,6 +108,210 @@ const libraryCatalog = [
     },
 ];
 
+const COURSE_GENERATION_CRITERIA = [
+    'Generate 5-8 lessons with a clear progression from foundation to practice and review.',
+    'Every lesson must include one concrete learning outcome and one hands-on task or reflection prompt.',
+    'Keep the course practical: explain the idea, show how to apply it, then reinforce it with a short exercise.',
+    'The final lesson must consolidate the course and prepare the learner for assessment or project work.',
+    'When the topic is technical, include a walkthrough, demo-oriented lesson, or implementation example.',
+];
+
+const CURATED_VIDEO_LIBRARY = [
+    {
+        match: ['react', 'frontend', 'javascript', 'web', 'typescript'],
+        title: 'React Tutorial Full Course - Beginner to Pro',
+        url: 'https://www.youtube.com/watch?v=TtPXvEcE11E',
+    },
+    {
+        match: ['react', 'frontend', 'javascript', 'web'],
+        title: 'React + TypeScript Tutorial',
+        url: 'https://www.youtube.com/watch?v=Rh3tobg7hEo',
+    },
+    {
+        match: ['typescript', 'type script'],
+        title: 'TypeScript Full Course',
+        url: 'https://www.youtube.com/watch?v=W3G4DuchKFY',
+    },
+    {
+        match: ['project management', 'project', 'planning', 'team', 'leadership'],
+        title: 'Project Management Full Course',
+        url: 'https://www.youtube.com/watch?v=eZDkSNHaWh8',
+    },
+    {
+        match: ['ai', 'artificial intelligence', 'automation', 'workflow', 'productivity', 'assistant'],
+        title: 'AI Workflow for Productivity',
+        url: 'https://www.youtube.com/watch?v=FwOTs4UxQS4',
+    },
+    {
+        match: ['ai', 'artificial intelligence', 'automation', 'workflow', 'productivity', 'assistant'],
+        title: 'ChatGPT for Beginners',
+        url: 'https://www.youtube.com/watch?v=uCIa6V4uF84',
+    },
+    {
+        match: ['agronomy', 'soil', 'agriculture', 'farming', 'crop', 'irrigation'],
+        title: 'What is Soil and Why is it Important?',
+        url: 'https://www.youtube.com/watch?v=udseIcrUxvA',
+    },
+    {
+        match: ['drone', 'uav', 'mapping', 'precision', 'survey'],
+        title: 'Precision Drone Mapping on a Budget',
+        url: 'https://www.youtube.com/watch?v=y0TgQ8QJ5Bk',
+    },
+];
+
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY?.trim() || '';
+const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL?.trim() || 'openai/gpt-oss-20b:free';
+const OPENROUTER_SITE_URL = process.env.OPENROUTER_SITE_URL?.trim() || 'http://localhost:3000';
+const OPENROUTER_APP_NAME = process.env.OPENROUTER_APP_NAME?.trim() || 'Cognify';
+
+function selectCuratedVideos(title: string, description: string | null | undefined, topic = '', limit = 2) {
+    const text = `${title} ${description || ''} ${topic}`.toLowerCase();
+    const matched = CURATED_VIDEO_LIBRARY.filter((item) =>
+        item.match.some((keyword) => text.includes(keyword)),
+    );
+    const fallback = CURATED_VIDEO_LIBRARY.filter((item) =>
+        item.match.some((keyword) => ['ai', 'productivity', 'workflow'].includes(keyword)),
+    );
+    return (matched.length ? matched : fallback).slice(0, limit);
+}
+
+async function attachCourseVideos(courseId: string, teacherId: string, videos: Array<{ title: string; url: string }>) {
+    if (!videos.length) return;
+    await prisma.mediaAsset.createMany({
+        data: videos.map((video) => ({
+            userId: teacherId,
+            courseId,
+            kind: 'video_link',
+            storageType: 'external',
+            originalName: video.title,
+            mimeType: 'text/uri-list',
+            path: video.url,
+            publicUrl: video.url,
+        })),
+    });
+}
+
+function extractJsonContent(content: unknown) {
+    if (content && typeof content === 'object') {
+        return content;
+    }
+    if (typeof content !== 'string') {
+        return {};
+    }
+
+    const trimmed = content.trim();
+    if (!trimmed) return {};
+
+    if (trimmed.includes('```json')) {
+        const extracted = trimmed.split('```json')[1]?.split('```')[0];
+        if (extracted) return JSON.parse(extracted.trim());
+    }
+    if (trimmed.includes('```')) {
+        const extracted = trimmed.split('```')[1]?.split('```')[0];
+        if (extracted) return JSON.parse(extracted.trim());
+    }
+
+    const firstBrace = trimmed.indexOf('{');
+    const lastBrace = trimmed.lastIndexOf('}');
+    const slice = firstBrace !== -1 && lastBrace !== -1 ? trimmed.slice(firstBrace, lastBrace + 1) : trimmed;
+    return JSON.parse(slice);
+}
+
+async function generateJsonWithOpenRouter<T>(prompt: string, schemaName: string, schema: Record<string, unknown>): Promise<T> {
+    if (!OPENROUTER_API_KEY) {
+        throw new Error('OPENROUTER_API_KEY is missing in server environment variables.');
+    }
+
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+            'HTTP-Referer': OPENROUTER_SITE_URL,
+            'X-Title': OPENROUTER_APP_NAME,
+        },
+        body: JSON.stringify({
+            model: OPENROUTER_MODEL,
+            messages: [
+                {
+                    role: 'system',
+                    content: 'Return only valid JSON that matches the requested schema. Do not wrap the answer in markdown.',
+                },
+                { role: 'user', content: prompt },
+            ],
+            response_format: {
+                type: 'json_schema',
+                json_schema: {
+                    name: schemaName,
+                    strict: true,
+                    schema,
+                },
+            },
+            stream: false,
+        }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`OpenRouter API Error: ${JSON.stringify(data)}`);
+    }
+
+    const content = data?.choices?.[0]?.message?.content;
+    const parsed = extractJsonContent(content);
+    return parsed as T;
+}
+
+async function generateJsonWithAi<T>(prompt: string, schemaName: string, schema: Record<string, unknown>, fallback: () => T): Promise<T> {
+    if (OPENROUTER_API_KEY) {
+        try {
+            return await generateJsonWithOpenRouter<T>(prompt, schemaName, schema);
+        } catch (error) {
+            console.error(`OpenRouter ${schemaName} generation error:`, error);
+        }
+    }
+
+    if (process.env.GEMINI_API_KEY) {
+        try {
+            return (await generateJsonWithGemini(prompt)) as T;
+        } catch (error) {
+            console.error(`Gemini ${schemaName} generation error:`, error);
+        }
+    }
+
+    return fallback();
+}
+
+async function generateTextWithAi(prompt: string, fallback: () => string): Promise<string> {
+    if (OPENROUTER_API_KEY) {
+        try {
+            const result = await generateJsonWithOpenRouter<{ result: string }>(prompt, 'text_response', {
+                type: 'object',
+                properties: {
+                    result: {
+                        type: 'string',
+                        description: 'Generated text response.',
+                    },
+                },
+                required: ['result'],
+                additionalProperties: false,
+            });
+            return result.result || '';
+        } catch (error) {
+            console.error('OpenRouter text generation error:', error);
+        }
+    }
+
+    if (process.env.GEMINI_API_KEY) {
+        try {
+            return await generateTextWithGemini(prompt);
+        } catch (error) {
+            console.error('Gemini text generation error:', error);
+        }
+    }
+
+    return fallback();
+}
+
 function buildFallbackCourse(topic: string, templateKey?: string, level?: string, language = 'en', audience?: string, durationWeeks?: number, goal?: string) {
     const safeTopic = topic.trim() || 'AI Course';
     const safeLevel = level || 'intermediate';
@@ -208,7 +412,7 @@ function translateFallback(text: string, language: string) {
         return `Перевод на русский: ${text}`;
     }
     if (language === 'kk') {
-        return `Kazakh translation: ${text}`;
+        return `Қазақ аудармасы: ${text}`;
     }
     return `English translation: ${text}`;
 }
@@ -239,7 +443,7 @@ function cleanTranslateHelper(text: string, language: string) {
     if (language === 'kk') {
         // Simple fallback for Kazakh
         let translated = normalized;
-        translated = translated.replace(/\bAI\b/g, 'AI');
+        translated = translated.replace(/\bAI\b/g, 'ЖИ');
         translated = translated.replace(/\bcourse\b/g, 'курс');
         translated = translated.replace(/\blearning\b/g, 'оқыту');
         return `Аударма: ${translated}`;
@@ -330,28 +534,69 @@ router.post('/generate-course', authMiddleware, requireRole('TEACHER', 'ADMIN'),
 
         const prompt = `
 You are an expert curriculum designer.
+Course quality standards:
+${COURSE_GENERATION_CRITERIA.map((item, index) => `${index + 1}. ${item}`).join('\n')}
+
 Generate strict JSON:
 {
   "title": "Course title",
   "description": "2-3 sentence description",
+  "language": "en",
+  "targetAudience": "Who this course is for",
+  "estimatedWeeks": 4,
+  "learningGoals": ["Goal 1", "Goal 2", "Goal 3"],
   "lessons": [{"title":"Module title","content":"Detailed lesson content"}]
 }
 Topic: "${topic}"
-Generate 4-6 lessons.
+Generate 5-8 lessons and keep the content practical, structured, and easy to follow.
 `;
+        const courseSchema = {
+            type: 'object',
+            properties: {
+                title: { type: 'string' },
+                description: { type: 'string' },
+                language: { type: 'string' },
+                targetAudience: { type: 'string' },
+                estimatedWeeks: { type: 'number' },
+                learningGoals: {
+                    type: 'array',
+                    items: { type: 'string' },
+                },
+                lessons: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            title: { type: 'string' },
+                            content: { type: 'string' },
+                        },
+                        required: ['title', 'content'],
+                        additionalProperties: false,
+                    },
+                },
+            },
+            required: ['title', 'description', 'language', 'targetAudience', 'estimatedWeeks', 'learningGoals', 'lessons'],
+            additionalProperties: false,
+        };
 
-        let parsedContent;
-        try {
-            parsedContent = await generateJsonWithGemini(prompt);
-        } catch (error) {
-            if (process.env.NODE_ENV === 'production') throw error;
-            parsedContent = buildFallbackCourse(topic);
-        }
+        const parsedContent = await generateJsonWithAi<{
+            title: string;
+            description: string;
+            language?: string;
+            targetAudience?: string;
+            estimatedWeeks?: number;
+            learningGoals?: string[];
+            lessons: Array<{ title: string; content: string }>;
+        }>(prompt, 'course_generation', courseSchema, () => buildFallbackCourse(topic));
         const course = await prisma.course.create({
             data: {
                 title: parsedContent.title,
                 description: parsedContent.description,
                 aiGenerated: true,
+                language: String(parsedContent.language || 'en'),
+                targetAudience: parsedContent.targetAudience || null,
+                estimatedWeeks: Number(parsedContent.estimatedWeeks || 4),
+                learningGoals: Array.isArray(parsedContent.learningGoals) ? JSON.stringify(parsedContent.learningGoals) : null,
                 teacherId,
                 lessons: {
                     create: parsedContent.lessons.map((lesson: any, index: number) => ({
@@ -364,7 +609,16 @@ Generate 4-6 lessons.
             include: { lessons: true },
         });
 
-        res.status(201).json({ course });
+        const suggestedVideos = selectCuratedVideos(parsedContent.title, parsedContent.description, topic, 2);
+        await attachCourseVideos(course.id, teacherId, suggestedVideos);
+
+        res.status(201).json({
+            course,
+            blueprint: {
+                criteria: COURSE_GENERATION_CRITERIA,
+                suggestedVideos,
+            },
+        });
     } catch (error) {
         console.error('AI Course Generation Error:', error);
         res.status(500).json({ error: 'Internal server error during AI generation.' });
@@ -397,6 +651,9 @@ router.post('/generate-from-template', authMiddleware, requireRole('TEACHER', 'A
 
         const prompt = `
 You are building a course by template.
+Course quality standards:
+${COURSE_GENERATION_CRITERIA.map((item, index) => `${index + 1}. ${item}`).join('\n')}
+
 Template: ${templateKey} (${templateHint})
 Topic: ${topic}
 Level: ${level}
@@ -414,15 +671,46 @@ Return strict JSON:
   "learningGoals":["...","...","..."],
   "lessons":[{"title":"...","content":"..."}]
 }
-Generate 5-8 lessons with clear progression.
+Generate 5-8 lessons with clear progression, an applied task in every module, and a strong final review lesson.
 `;
-        let parsedContent;
-        try {
-            parsedContent = await generateJsonWithGemini(prompt);
-        } catch (error) {
-            if (process.env.NODE_ENV === 'production') throw error;
-            parsedContent = buildFallbackCourse(topic, templateKey, level, language, targetAudience, durationWeeks, courseGoal);
-        }
+        const courseSchema = {
+            type: 'object',
+            properties: {
+                title: { type: 'string' },
+                description: { type: 'string' },
+                language: { type: 'string' },
+                targetAudience: { type: 'string' },
+                estimatedWeeks: { type: 'number' },
+                learningGoals: {
+                    type: 'array',
+                    items: { type: 'string' },
+                },
+                lessons: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            title: { type: 'string' },
+                            content: { type: 'string' },
+                        },
+                        required: ['title', 'content'],
+                        additionalProperties: false,
+                    },
+                },
+            },
+            required: ['title', 'description', 'language', 'targetAudience', 'estimatedWeeks', 'learningGoals', 'lessons'],
+            additionalProperties: false,
+        };
+
+        const parsedContent = await generateJsonWithAi<{
+            title: string;
+            description: string;
+            language?: string;
+            targetAudience?: string;
+            estimatedWeeks?: number;
+            learningGoals?: string[];
+            lessons: Array<{ title: string; content: string }>;
+        }>(prompt, 'course_template_generation', courseSchema, () => buildFallbackCourse(topic, templateKey, level, language, targetAudience, durationWeeks, courseGoal));
 
         const course = await prisma.course.create({
             data: {
@@ -450,7 +738,16 @@ Generate 5-8 lessons with clear progression.
             include: { lessons: true },
         });
 
-        res.status(201).json({ course });
+        const suggestedVideos = selectCuratedVideos(parsedContent.title, parsedContent.description, topic, 2);
+        await attachCourseVideos(course.id, teacherId, suggestedVideos);
+
+        res.status(201).json({
+            course,
+            blueprint: {
+                criteria: COURSE_GENERATION_CRITERIA,
+                suggestedVideos,
+            },
+        });
     } catch (error) {
         console.error('AI Template Generation Error:', error);
         res.status(500).json({ error: 'Internal server error during template generation.' });
@@ -490,13 +787,20 @@ Task: ${instruction}
 Return strict JSON:
 {"result":"helpful response text"}
 `;
-        try {
-            const json = await generateJsonWithGemini(prompt);
-            res.json({ result: json.result || '' });
-        } catch (error) {
-            if (process.env.NODE_ENV === 'production') throw error;
-            res.json({ result: buildTutorFallback(action, lessonTitle, lessonContent, studentAnswer) });
-        }
+        const json = await generateJsonWithAi<{ result: string }>(
+            prompt,
+            'tutor_assist',
+            {
+                type: 'object',
+                properties: {
+                    result: { type: 'string' },
+                },
+                required: ['result'],
+                additionalProperties: false,
+            },
+            () => ({ result: buildTutorFallback(action, lessonTitle, lessonContent, studentAnswer) }),
+        );
+        res.json({ result: json.result || '' });
     } catch (error) {
         console.error('AI Tutor error:', error);
         res.status(500).json({ error: 'Internal server error during tutor assist.' });
@@ -563,14 +867,66 @@ Return strict JSON:
 }
 Generate 4-6 quiz questions, one assignment, and 3 rubric criteria.
 `;
+        const assessmentSchema = {
+            type: 'object',
+            properties: {
+                title: { type: 'string' },
+                summary: { type: 'string' },
+                quizQuestions: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            id: { type: 'string' },
+                            prompt: { type: 'string' },
+                            options: {
+                                type: 'array',
+                                items: { type: 'string' },
+                            },
+                            answer: { type: 'string' },
+                            explanation: { type: 'string' },
+                        },
+                        required: ['id', 'prompt', 'options', 'answer', 'explanation'],
+                        additionalProperties: false,
+                    },
+                },
+                assignment: {
+                    type: 'object',
+                    properties: {
+                        title: { type: 'string' },
+                        brief: { type: 'string' },
+                        deliverables: {
+                            type: 'array',
+                            items: { type: 'string' },
+                        },
+                    },
+                    required: ['title', 'brief', 'deliverables'],
+                    additionalProperties: false,
+                },
+                rubric: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            criterion: { type: 'string' },
+                            weight: { type: 'number' },
+                        },
+                        required: ['criterion', 'weight'],
+                        additionalProperties: false,
+                    },
+                },
+            },
+            required: ['title', 'summary', 'quizQuestions', 'assignment', 'rubric'],
+            additionalProperties: false,
+        };
 
-        try {
-            const assessmentPack = await generateJsonWithGemini(prompt);
-            res.json({ assessmentPack });
-        } catch (error) {
-            if (process.env.NODE_ENV === 'production') throw error;
-            res.json({ assessmentPack: buildAssessmentFallback(course.title, course.lessons) });
-        }
+        const assessmentPack = await generateJsonWithAi(
+            prompt,
+            'assessment_pack',
+            assessmentSchema,
+            () => buildAssessmentFallback(course.title, course.lessons),
+        );
+        res.json({ assessmentPack });
     } catch (error) {
         console.error('AI Assessment Generation Error:', error);
         res.status(500).json({ error: 'Internal server error during assessment generation.' });
@@ -619,7 +975,34 @@ router.post('/library-assist', authMiddleware, async (req: AuthRequest, res: Res
                 }
             `;
             try {
-                const results = await generateJsonWithGemini(prompt);
+                const results = await generateJsonWithAi(
+                    prompt,
+                    'library_search',
+                    {
+                        type: 'object',
+                        properties: {
+                            items: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        title: { type: 'string' },
+                                        source: { type: 'string' },
+                                        summary: { type: 'string' },
+                                        tags: { type: 'array', items: { type: 'string' } },
+                                        language: { type: 'string' },
+                                        type: { type: 'string' },
+                                    },
+                                    required: ['title', 'source', 'summary', 'tags', 'language', 'type'],
+                                    additionalProperties: false,
+                                },
+                            },
+                        },
+                        required: ['items'],
+                        additionalProperties: false,
+                    },
+                    () => ({ items: libraryCatalog.slice(0, 5) }),
+                );
                 res.json({
                     items: results.items || [],
                     message: `Discovery mode finding resources for: ${query || text}`,
@@ -638,7 +1021,7 @@ router.post('/library-assist', authMiddleware, async (req: AuthRequest, res: Res
         if (mode === 'translate') {
             const prompt = `Translate the following educational text into ${targetLanguage}. Return ONLY the translation.\n\nText: ${text || query}`;
             try {
-                const translated = await generateTextWithGemini(prompt);
+                const translated = await generateTextWithAi(prompt, () => safeLibraryTranslation(text || query, targetLanguage));
                 res.json({
                     translated,
                     summary: summarizeFallback(text || query),
@@ -662,7 +1045,7 @@ router.post('/library-assist', authMiddleware, async (req: AuthRequest, res: Res
         if (mode === 'summarize') {
             const prompt = `Summarize the following educational text in ${targetLanguage}. Keep it concise but informative. Return ONLY the summary.\n\nText: ${text || query}`;
             try {
-                const summary = await generateTextWithGemini(prompt);
+                const summary = await generateTextWithAi(prompt, () => summarizeFallback(text || query));
                 res.json({
                     summary,
                     translated: safeLibraryTranslation(text || query, targetLanguage),
@@ -721,7 +1104,7 @@ router.post('/library-upload', authMiddleware, upload.single('file'), async (req
             ? `Translate the following document content into ${targetLanguage}:\n\n${content}`
             : `Summarize the following document content in ${targetLanguage}:\n\n${content}`;
 
-        const result = await generateTextWithGemini(prompt);
+        const result = await generateTextWithAi(prompt, () => (mode === 'translate' ? safeLibraryTranslation(content, targetLanguage) : summarizeFallback(content)));
 
         res.json({
             mode,
