@@ -8,6 +8,20 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+.gamificationCard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  gap: 30px;
+}
+
+@media (max-width: 980px) {
+  .gamificationCard {
+    grid-template-columns: 1fr;
+  }
+}
+
 .progressFill {
   height: 100%;
   background: linear-gradient(90deg, var(--primary), var(--secondary-light));
@@ -28,20 +42,28 @@
 }
 
 .aiTutorCard {
-  background: linear-gradient(135deg, rgba(249, 115, 22, 0.12), rgba(251, 146, 60, 0.08));
+  background: linear-gradient(
+    135deg,
+    rgba(249, 115, 22, 0.12),
+    rgba(251, 146, 60, 0.08)
+  );
   border: 1px solid rgba(251, 146, 60, 0.25);
   position: relative;
   overflow: hidden;
 }
 
 .aiTutorCard::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -50%;
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, transparent 50%);
+  background: radial-gradient(
+    circle,
+    rgba(249, 115, 22, 0.15) 0%,
+    transparent 50%
+  );
   animation: shimmer 8s linear infinite;
   pointer-events: none;
 }
@@ -149,7 +171,7 @@
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -342,44 +364,48 @@
   color: #fb923c;
 }
 
-[data-theme='light'] .progressBar {
+[data-theme="light"] .progressBar {
   background: rgba(234, 122, 24, 0.05);
   border-color: rgba(194, 132, 63, 0.12);
 }
 
-[data-theme='light'] .statChip {
+[data-theme="light"] .statChip {
   background: rgba(255, 253, 249, 0.88);
   border-color: rgba(194, 132, 63, 0.1);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
 }
 
-[data-theme='light'] .statChip:hover {
+[data-theme="light"] .statChip:hover {
   background: rgba(244, 234, 223, 0.9);
   border-color: rgba(234, 122, 24, 0.18);
 }
 
-[data-theme='light'] .profileCard {
+[data-theme="light"] .profileCard {
   background: rgba(255, 253, 249, 0.9);
   border-color: rgba(194, 132, 63, 0.1);
   box-shadow: 0 20px 40px rgba(145, 97, 42, 0.08);
 }
 
-[data-theme='light'] .miniBar {
+[data-theme="light"] .miniBar {
   background: rgba(194, 132, 63, 0.08);
 }
 
-[data-theme='light'] .aiTutorCard {
-  background: linear-gradient(135deg, rgba(234, 122, 24, 0.06), rgba(255, 215, 165, 0.05));
+[data-theme="light"] .aiTutorCard {
+  background: linear-gradient(
+    135deg,
+    rgba(234, 122, 24, 0.06),
+    rgba(255, 215, 165, 0.05)
+  );
   border-color: rgba(194, 132, 63, 0.14);
 }
 
-[data-theme='light'] .recommendationCard,
-[data-theme='light'] .focusCard {
+[data-theme="light"] .recommendationCard,
+[data-theme="light"] .focusCard {
   background: rgba(255, 253, 249, 0.92);
   border-color: rgba(194, 132, 63, 0.1);
 }
 
-[data-theme='light'] .focusChip {
+[data-theme="light"] .focusChip {
   background: rgba(255, 253, 249, 0.9);
   border-color: rgba(194, 132, 63, 0.1);
 }
@@ -402,6 +428,10 @@
 }
 
 @keyframes shimmer {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
