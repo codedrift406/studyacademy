@@ -6,6 +6,7 @@ import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { authFetch } from "../lib/api";
 import { usePreferences } from "../context/PreferencesContext";
+import styles from './profile.module.css'
 
 interface Profile {
   id: string;
@@ -158,11 +159,11 @@ export const ProfilePage = () => {
 
   return (
     <div
-      className="glass-panel"
-      style={{ display: "grid", gap: "2rem", padding: "2rem" }}
+      className={`glass-panel ${styles.body} ${styles.profileCard}`}
+      style={{ display: "grid", gap: "2rem" }}
     >
       <Card interactive>
-        <CardBody>
+        <CardBody className="hello" >
           <div
             style={{
               display: "flex",
@@ -177,21 +178,6 @@ export const ProfilePage = () => {
               {t("profile.title", "Профиль")}
             </h1>
           </div>
-          {/* {avatarUrl && (
-            <div style={{ marginBottom: "0.9rem", width: 300, height: 300 }}>
-              <img
-                src={avatarUrl}
-                alt="Предпросмотр аватара профиля"
-                style={{
-                  objectFit: "cover",
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: "50%",
-                  border: "1px solid var(--border-glass)",
-                }}
-              />
-            </div>
-          )} */}
           {avatarUrl && (
             <div
               style={{
@@ -257,6 +243,7 @@ export const ProfilePage = () => {
                 {t("profile.description", "Описание")}
               </div>
               <textarea
+                className={styles.bioTextarea}
                 value={bio}
                 onChange={(event) => setBio(event.target.value)}
                 rows={4}

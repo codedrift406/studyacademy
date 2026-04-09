@@ -37,7 +37,7 @@
   flex-direction: column;
   padding: 2rem 1.5rem;
   transition: transform var(--transition-smooth);
-  z-index: 20;
+  z-index: 40;
 }
 
 .brandIcon {
@@ -102,6 +102,12 @@
   color: var(--text-primary);
   box-shadow: 0 4px 10px color-mix(in srgb, var(--primary) 25%, transparent);
 }
+
+@media (max-width:) {
+  
+}
+
+
 
 .themeToggle {
   width: 44px;
@@ -199,7 +205,7 @@
 }
 
 .header {
-  height: 80px;
+  /* height: 80px; */
   min-height: 80px;
   background: rgba(5, 8, 15, 0.6);
   -webkit-backdrop-filter: blur(12px);
@@ -211,7 +217,7 @@
   justify-content: space-between;
   position: sticky;
   top: 0;
-  z-index: 90;
+  z-index: 10;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
@@ -507,7 +513,25 @@
   }
 }
 
-@media (max-width: 768px) {
+.themeToggleContainer{
+  display: none;
+  
+  justify-content: center;
+  align-items: center;
+}
+@media (max-width: 1000px) {
+.themeToggleContainer{
+
+  display: flex;
+}
+
+.hide{
+  display: none;
+}
+
+  .headerTitle{
+    display: none;
+  }
   .sidebar {
     position: fixed;
     top: 0;
@@ -529,7 +553,8 @@
   }
 
   .header {
-    padding: 0 1rem;
+    padding: 10px 1rem;
+   
   }
 
   .langBtn {
@@ -560,5 +585,7 @@
 
   .userInfo {
     justify-content: flex-end;
+    flex-wrap: nowrap;
+      gap: 0.5rem;
   }
 }

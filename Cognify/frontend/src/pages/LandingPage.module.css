@@ -236,6 +236,10 @@
   flex-wrap: wrap;
 }
 
+.loginBtn{
+  background: var(--primary)!important;
+}
+
 .btnPrimary {
   background: var(--primary);
   color: white;

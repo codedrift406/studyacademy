@@ -108,7 +108,7 @@ export const LandingPage = () => {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`${styles.btnPrimary} neon-border-inner`}
+              className={`${styles.btnPrimary} neon-border-inner ${styles.loginBtn}`}
               style={{ padding: '0.6rem 1.5rem', background: 'var(--bg-surface)' }}
               onClick={() => navigate('/auth')}
               type="button"
